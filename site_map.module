@@ -38,6 +38,15 @@ function site_map_settings() {
   $output .= form_checkbox(t('Include RSS links by categories'), 'site_map_show_rss_links', 1, variable_get('site_map_show_rss_links', 1), t('When enabled, this option will show links to the RSS feeds for each category.'));
   $output .= form_textfield(t('RSS feed depth'), 'site_map_rss_depth', variable_get('site_map_rss_depth', 'all'), 3, 10, t('Specify how many subcategories should be included in the RSS feed.  Enter "all" to include all subcategories or "0" to include no subcategories.'));
 
+  $result = db_query('SELECT vid, name FROM {vocabulary}');
+  $value = variable_get('site_map_show_vocabularies', array());
+
+  while ($row = db_fetch_object($result)) {
+    $options[$row->vid] = $row->name;
+  }
+
+  $output .= form_select(t('Categories to include in the site map'), 'site_map_show_vocabularies', $value, $options, NULL, 0, TRUE);
+
   return $output;
 }
 
@@ -76,7 +85,8 @@ function _site_map_page() {
   //
   // Compile the vocabulary trees.
   //
-  $result = db_query('SELECT vid,name,description FROM {vocabulary}');
+  $vids = variable_get('site_map_show_vocabularies', array('0'));
+  $result = db_query('SELECT vid,name,description FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
   while ($t = db_fetch_object($result)) {
     $tree = taxonomy_get_tree($t->vid);
 
