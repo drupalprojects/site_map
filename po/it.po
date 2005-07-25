@@ -1,0 +1,86 @@
+# LANGUAGE translation of Drupal (../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: site_map.module,v 1.9.2.1 2005/04/27 18:58:50 njivy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mappa del Sito\n"
+"POT-Creation-Date: 2005-06-08 14:10+0200\n"
+"PO-Revision-Date: 2005-07-11 13:46+0100\n"
+"Last-Translator: Michele Fantetti <michele.fantetti@consulenti.fastweb.it>\n"
+"Language-Team: Michele Fantetti <michele.fantetti@sanseverosport.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:13
+msgid "Display a site map."
+msgstr "Visualizza la mappa del sito."
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:35
+msgid "Site map message"
+msgstr "Messaggio della mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:35
+msgid "Define a message to be displayed above the site map."
+msgstr "Definisci un messaggio da visualizzare sopra la mappa del sito."
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:36
+msgid "Show node counts by categories"
+msgstr "Mostra il conteggio dei nodi per categorie"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:36
+msgid "When enabled, this option will show the number of nodes in each taxonomy term."
+msgstr "Quando abilitata, questa opzione mostra il numero dei nodi in ogni tassonomia."
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:37
+msgid "Include navigation menus"
+msgstr "Includi i menu di navigazione"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:37
+msgid "When enabled, this option will include the fully-expanded top-level navigation menus in the site map"
+msgstr "Quando abilitata, questa opzione include i menu di navigazione del livello superiore completamente espansi nella mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:38
+msgid "Include RSS links by categories"
+msgstr "Includi i link RSS per categoria"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:38
+msgid "When enabled, this option will show links to the RSS feeds for each category."
+msgstr "Quando abilitata, questa opzione mostra i link ai feed RSS per ogni categoria."
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:39
+msgid "RSS feed depth"
+msgstr "Profondità della fonte RSS"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:39
+msgid "Specify how many subcategories should be included in the RSS feed.  Enter \"all\" to include all subcategories or \"0\" to include no subcategories."
+msgstr "Specifica quante sottocategorie dovrebbero essere incluse nella fonte RSS. Inserisci \"all\" per includerle tutte."
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:48
+msgid "Categories to include in the site map"
+msgstr "Categorie da includere nella mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:59
+msgid "site map"
+msgstr "mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:140
+msgid "RSS"
+msgstr "RSS"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:28
+msgid "access site map"
+msgstr "accedi alla mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:28
+msgid "administer site map"
+msgstr "amministra la mappa del sito"
+
+#: ../site_map-4.6.0.tar.gz_FILES/site_map/site_map.module:0
+msgid "site_map"
+msgstr "mappa"
+
