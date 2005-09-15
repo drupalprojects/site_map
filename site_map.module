@@ -167,9 +167,5 @@ function _site_map_taxonomy_tree(&$tree, $show_count, $name = NULL, $description
   return '<div class="site_map">'.$output.'</div>';
 }
 
-<<<<<<< site_map.module
 ?>
 
-=======
-?>
->>>>>>> 1.9.2.1
