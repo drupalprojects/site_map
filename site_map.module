@@ -135,7 +135,7 @@ function _site_map_taxonomy_tree(&$tree, $show_count, $name = NULL, $description
     // Display the $term.  If $term->count exists, show the count too.
     //
     $output .= '<li>';
-    $output .= l(check_plain($term->name), 'taxonomy/term/'. $term->tid, array('title' => $term->description));
+    $output .= l(check_plain($term->name), 'taxonomy/term/'. $term->tid, array('title' => $term->description), NULL, NULL, FALSE, TRUE);
     if ($show_rss_links) {
       $output = $output . ' <span class="rss">' . l(t('RSS'), "taxonomy/term/{$term->tid}/{$rss_depth}/feed") . '</span>';
     }
@@ -167,4 +167,9 @@ function _site_map_taxonomy_tree(&$tree, $show_count, $name = NULL, $description
   return '<div class="site_map">'.$output.'</div>';
 }
 
+<<<<<<< site_map.module
 ?>
+
+=======
+?>
+>>>>>>> 1.9.2.1
