@@ -19,14 +19,12 @@ function site_map_help($section = 'admin/help#site_map') {
   }
 }
 
-
 /**
  * Implementation of hook_perm().
  */
 function site_map_perm() {
   return array('access site map');
 }
-
 
 /**
  * Implementation of hook_settings().
@@ -37,6 +35,7 @@ function site_map_settings() {
   $group = form_checkbox(t('Show recent blog authors'), 'site_map_show_blogs', 1, variable_get('site_map_show_blogs', 1), t('When enabled, this option will show the recent blog authors.'));
   $group .= form_checkbox(t('Show books'), 'site_map_show_books', 1, variable_get('site_map_show_books', 1), t('When enabled, this option will show all books.'));
   $group .= form_checkbox(t('Show node counts by categories'), 'site_map_show_count', 1, variable_get('site_map_show_count', 1), t('When enabled, this option will show the number of nodes in each taxonomy term.'));
+  $group .= form_textfield(t('Categories depth'), 'site_map_categories_depth', variable_get('site_map_categories_depth', 'all'), 3, 10, t('Specify how many subcategories should be included on the categorie page.  Enter "all" to include all subcategories or "0" to include no subcategories.'));
 
   $result = db_query('SELECT vid, name FROM {vocabulary}');
   while ($row = db_fetch_object($result)) {
@@ -79,7 +78,6 @@ function site_map_menu($may_cache) {
   return $items;
 }
 
-
 /**
  * Menu callback; The site map
  */
@@ -99,10 +97,10 @@ function site_map_page() {
     $output .= _site_map_books();
   }
 
-  $output .= _site_map_menu_tree();
+  $output .= _site_map_menu();
 
   // Compile the vocabulary trees.
-  $output .= _site_map_render();
+  $output .= _site_map_taxonomy();
 
   $output = '<div class="site_map">'. $output .'</div>';
 
@@ -140,7 +138,6 @@ function _site_map_blogs() {
   return $output;
 }
 
-
 /**
  * Render books
  */
@@ -170,23 +167,53 @@ function _site_map_books() {
   return $output;
 }
 
-
 /**
- * This function can be called from blocks or pages as desired.
+ * Render menus
  */
-function _site_map_render() {
-  $vids = variable_get('site_map_show_vocabularies', array());
-  $result = db_query('SELECT vid, name, description 
-    FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
-  while ($t = db_fetch_object($result)) {
-    // taxonomy_get_tree() honors access controls
-    $tree = taxonomy_get_tree($t->vid);
-    $output .= _site_map_taxonomy_tree($tree, $t->name, $t->description);
+function _site_map_menu() {
+  if ($menus = variable_get('site_map_show_menus', array())) {
+    $menu = menu_get_menu();
+    foreach ($menus as $mid) {
+      $title = $menu['visible'][$mid]['title'];
+      $menu_display = _site_map_menu_tree($mid, $menu);
+      $output .= theme('box', $title, $menu_display);
+    }
   }
 
   return $output;
 }
 
+function _site_map_menu_tree($pid = 1, $menu = NULL) {
+// based on functions theme_menu_tree and menu_tree
+  if (isset($menu['visible'][$pid]) && $menu['visible'][$pid]['children']) {
+    foreach ($menu['visible'][$pid]['children'] as $mid) {
+      $children = isset($menu['visible'][$mid]['children']) ? $menu['visible'][$mid]['children'] : NULL;
+      $menu_tree .= theme('menu_item', $mid, _site_map_menu_tree($mid, $menu), count($children) == 0);
+    }
+  }
+  if ($menu_tree) {
+    $output = '<ul class="tree">'. $menu_tree .'</ul>';
+  }
+
+  return $output;
+}
+
+/**
+ * This function can be called from blocks or pages as desired.
+ */
+function _site_map_taxonomy() {
+  if ($vids = variable_get('site_map_show_vocabularies', array())) {
+    $result = db_query('SELECT vid, name, description 
+      FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
+    while ($t = db_fetch_object($result)) {
+      // taxonomy_get_tree() honors access controls
+      $tree = taxonomy_get_tree($t->vid);
+      $output .= _site_map_taxonomy_tree($tree, $t->name, $t->description);
+    }
+  }
+
+  return $output;
+}
 
 /**
  * Render taxonomy tree
@@ -198,10 +225,19 @@ function _site_map_render() {
  */
 function _site_map_taxonomy_tree(&$tree, $name = NULL, $description = NULL) {
   $title = $name ? $name : '';
-  $output = $description ? '<div class="description">'. $description. '</div>' : '';
-
   $last_depth = -1;
+  $rss_depth = variable_get('site_map_rss_depth', 'all');
+  if (!is_numeric($rss_depth) || $rss_depth < 0) {
+    $rss_depth = 'all';
+  }
+  $cat_depth = variable_get('site_map_categories_depth', 'all');
+  if (!is_numeric($cat_depth) || $cat_depth < 0) {
+    $cat_depth = 'all';
+  }
+
+  $output = $description ? '<div class="description">'. $description. '</div>' : '';
   $output .= '<div class="tree">';
+
   foreach ($tree as $term) {
     // Adjust the depth of the <ul> based on the change
     // in $term->depth since the $last_depth.
@@ -217,24 +253,19 @@ function _site_map_taxonomy_tree(&$tree, $name = NULL, $description = NULL) {
     }
     // Display the $term.
     $output .= '<li>';
-    $output .= l(check_plain($term->name), 'taxonomy/term/'. $term->tid, array('title' => $term->description), NULL, NULL, FALSE, TRUE);
+    $output .= l(check_plain($term->name), "taxonomy/term/$term->tid/$cat_depth", array('title' => $term->description), NULL, NULL, FALSE, TRUE);
     if (variable_get('site_map_show_count', 1)) {
       $count = taxonomy_term_count_nodes($term->tid);
       $output .= " ($count)";
     }
     if (variable_get('site_map_show_rss_links', 1)) {
-      if (is_numeric($rss_depth) && $rss_depth > 0) {
-        $rss_depth = variable_get('site_map_rss_depth', 'all');
-      }
-      else {
-        $rss_depth = 'all';
-      }
       $output .= ' '. l(t('RSS'), "taxonomy/term/$term->tid/$rss_depth/feed", array('class' => 'rss'));
     }
     $output .= "</li>\n";
     // Reset $last_depth in preparation for the next $term.
     $last_depth = $term->depth;
   }
+
   // Bring the depth back to where it began, -1.
   if ($last_depth > -1) {
     for ($i = 0; $i < ($last_depth + 1); $i++) {
@@ -243,37 +274,6 @@ function _site_map_taxonomy_tree(&$tree, $name = NULL, $description = NULL) {
   }
   $output .= "</div>\n";
   $output = theme('box', $title, $output);
-
-  return $output;
-}
-
-function _site_map_menu_tree() {
-  if ($menus = variable_get('site_map_show_menus', array())) {
-    $output = '';
-    $menu = menu_get_menu();
-    foreach ($menus as $mid) {
-      $title = $menu['visible'][$mid]['title'];
-      $menu_display = theme('site_map_menu_tree', $mid, $menu);
-      $output .= theme('box', $title, $menu_display);
-    }
-  }
-
-  return $output;
-}
-
-function theme_site_map_menu_tree($pid = 1, $menu = NULL) {
-// based on functions theme_menu_tree and menu_tree
-  $menu_tree = '';
-  if (isset($menu['visible'][$pid]) && $menu['visible'][$pid]['children']) {
-    foreach ($menu['visible'][$pid]['children'] as $mid) {
-      $type = isset($menu['visible'][$mid]['type']) ? $menu['visible'][$mid]['type'] : NULL;
-      $children = isset($menu['visible'][$mid]['children']) ? $menu['visible'][$mid]['children'] : NULL;
-      $menu_tree .= theme('menu_item', $mid, theme('site_map_menu_tree', $mid, $menu), count($children) == 0);
-    }
-  }
-  if ($menu_tree) {
-    $output = '<ul class="tree">'. $menu_tree .'</ul>';
-  }
 
   return $output;
 }
