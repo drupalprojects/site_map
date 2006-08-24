@@ -14,7 +14,7 @@ The site map can display the following items:
 
 * A message to be displayed above the site map
 * The latest blogs.
-* All book titles.
+* Any books with titles and optionally expanded.
 * An optional menu that will be displayed fully expanded.
 * Any categories, i.e vocabulary, with all the terms expanded.
   Optionally with node counts and RSS feeds.
