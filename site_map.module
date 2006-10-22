@@ -56,34 +56,40 @@ function site_map_settings() {
   while ($row = db_fetch_object($result)) {
     $book_options[$row->nid] = $row->title;
   }
-  $book_options[0] = t('<none>');
+  //$book_options[0] = t('<none>');
   $form['site_map_content']['site_map_show_books'] = array(
     '#type' => 'select',
     '#title' => t('Books to include in the site map'),
     '#default_value' => variable_get('site_map_show_books', array()),
     '#options' => $book_options,
     '#multiple' => TRUE,
+    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
+  );
+  $menu_options = array();
+  $menu_options = menu_get_root_menus();
+  //$menu_options[0] = t('<none>');
+  $form['site_map_content']['site_map_show_menus'] = array(
+    '#type' => 'select',
+    '#title' => t('Menus to include in the site map'),
+    '#default_value' => variable_get('site_map_show_menus', array()),
+    '#options' => $menu_options,
+    '#multiple' => TRUE,
+    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
   $vocab_options = array();
-  foreach (taxonomy_get_vocabularies() as $vocabulary) {
-    $vocab_options[$vocabulary->vid] = $vocabulary->name;
+  if (module_exist('taxonomy')) {
+    foreach (taxonomy_get_vocabularies() as $vocabulary) {
+      $vocab_options[$vocabulary->vid] = $vocabulary->name;
+    }
   }
-  $vocab_options[0] = t('<none>');
+  //$vocab_options[0] = t('<none>');
   $form['site_map_content']['site_map_show_vocabularies'] = array(
     '#type' => 'select',
     '#title' => t('Categories to include in the site map'),
     '#default_value' => variable_get('site_map_show_vocabularies', array()),
     '#options' => $vocab_options,
     '#multiple' => TRUE,
-  );
-  $menu_options = array();
-  $menu_options = menu_get_root_menus();
-  $menu_options[0] = t('<none>');
-  $form['site_map_content']['site_map_show_menus'] = array(
-    '#type' => 'select',
-    '#title' => t('Menu to include in the site map'),
-    '#default_value' => variable_get('site_map_show_menus', 0),
-    '#options' => $menu_options,
+    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
 
   $form['site_map_content_options'] = array(
@@ -148,14 +154,15 @@ function site_map_menu($may_cache) {
       'title' => t('site map'),
       'callback' => 'site_map_page',
       'access' => user_access('access site map'),
-      'type' => MENU_SUGGESTED_ITEM);
+      'type' => MENU_SUGGESTED_ITEM
+    );
   }
 
   return $items;
 }
 
 /**
- * Menu callback; The site map
+ * Menu callback for the site map.
  */
 function site_map_page() {
   // Set css file
@@ -170,11 +177,23 @@ function site_map_page() {
 function theme_site_map_display() {
   $output = '';
 
+  if (variable_get('site_map_show_rss_links', 1)) {
+    $output .= '<p><span class="rss">'. t('RSS') .'</span> '. t('This is a link to a content RSS feed');
+    if (module_exist('commentrss')) {
+      $output .= '<br /><span class="rss">'. t('C-RSS') .'</span>'. t('This is a link to a comment RSS feed');
+    }
+    $output .= '</p>';
+  }
+
   $output .= _site_map_front_page();
 
   if (variable_get('site_map_show_blogs', 0)) {
     $output .= _site_map_blogs();
   }
+
+/*   $output .= _site_map_audio(); */
+
+/*   $output .= _site_map_video(); */
 
   // Compile the books trees.
   $output .= _site_map_books();
@@ -192,7 +211,7 @@ function theme_site_map_display() {
 
 function _site_map_front_page() {
   $title = t('Front page');
-  $output = l(t("Front page of %sn", array ("%sn" => variable_get('site_name', 'Drupal'))), NULL) . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'rss.xml', array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
+  $output = l(t("Front page of %sn", array("%sn" => theme('placeholder', variable_get('site_name', 'Drupal')))), '<front>', NULL, NULL, NULL, FALSE, TRUE) . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'rss.xml', array('class' => 'rss', 'title' => t('Syndicate content'))) . (module_exist('commentrss') ? ' '. l(t('C-RSS'), 'crss', array('class' => 'rss', 'title' => t('Syndicate comments'))) : '') : '');
   $output = theme('box', $title, $output);
 
   return $output;
@@ -204,18 +223,38 @@ function _site_map_front_page() {
 function _site_map_blogs() {
   if (module_exist('blog')) {
     $title = t('Blogs');
-    $output = '<div class="description">'. t("Community blog and recent blog authors at <i>%sn</i>.", array ("%sn" => variable_get('site_name', 'Drupal'))) .'</div>';
+    $output = '<div class="description">'. t("Community blog and recent blog authors at %sn.", array("%sn" => theme('placeholder', variable_get('site_name', 'Drupal')))) .'</div>';
 
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'blog/feed', array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
-    $result = db_query_range("SELECT DISTINCT u.uid, u.name 
+    $result = db_query_range("SELECT DISTINCT u.uid, u.name, n.created 
       FROM {users} u 
       INNER JOIN {node} n ON u.uid = n.uid 
       WHERE n.type = 'blog' AND n.status = 1 ORDER BY n.created DESC", 0, 10);
     while ($account = db_fetch_object($result)) {
-      $blogs[] = l(t("%s's blog", array ("%s" => $account->name)), "blog/$account->uid") . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), "blog/$account->uid/feed", array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
+      $blogs[] = l(t("%s's blog", array("%s" => $account->name)), "blog/$account->uid") . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), "blog/$account->uid/feed", array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
     }
     $output .= theme('item_list', $blogs);
+    $output = theme('box', $title, $output);
+  }
+
+  return $output;
+}
+
+function _site_map_audio() {
+  if (module_exist('audio')) {
+    $title = t('Audio');
+    $output = l(t('Audio content'), 'audio') . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'audio/feed', array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
+    $output = theme('box', $title, $output);
+  }
+
+  return $output;
+}
+
+function _site_map_video() {
+  if (module_exist('video')) {
+    $title = t('Video');
+    $output = l(t('Video content'), 'video') . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'video/feed', array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
     $output = theme('box', $title, $output);
   }
 
@@ -228,7 +267,7 @@ function _site_map_blogs() {
 function _site_map_books() {
   if (module_exist('book') && $nids = variable_get('site_map_show_books', array())) {
     $title = t('Books');
-    $description = '<div class="description">'. t("Books at <i>%sn</i>.", array ("%sn" => variable_get('site_name', 'Drupal'))) .'</div>';
+    $description = '<div class="description">'. t("Books at %sn.", array("%sn" => theme('placeholder', variable_get('site_name', 'Drupal')))) .'</div>';
     $result = db_query(db_rewrite_sql('SELECT n.nid, n.title FROM {node} n INNER JOIN {book} b ON n.vid = b.vid WHERE b.parent = 0 AND n.status = 1 AND n.moderate = 0 AND n.nid IN (%s) ORDER BY b.weight, n.title'), implode(',', $nids));
     while ($node = db_fetch_object($result)) {
       $book_display .= '<h3>'. l($node->title, 'node/'. $node->nid) .'</h3>';
@@ -247,11 +286,13 @@ function _site_map_books() {
  * Render menus
  */
 function _site_map_menus() {
-  if ($mid = variable_get('site_map_show_menus', 0)) {
+  if ($mids = variable_get('site_map_show_menus', array())) {
     $menu = menu_get_menu();
-    $title = $menu['visible'][$mid]['title'];
-    $menu_display = _site_map_menu_tree($mid, $menu);
-    $output .= theme('box', $title, $menu_display);
+    foreach ($mids as $mid){
+      $title = $menu['visible'][$mid]['title'];
+      $menu_display = _site_map_menu_tree($mid, $menu);
+      $output .= theme('box', $title, $menu_display);
+    }
   }
 
   return $output;
@@ -278,7 +319,7 @@ function _site_map_menu_tree($pid = 1, $menu = NULL) {
  */
 function _site_map_taxonomys() {
   if (module_exist('taxonomy') && $vids = variable_get('site_map_show_vocabularies', array())) {
-    $result = db_query('SELECT vid, name, description 
+    $result = db_query('SELECT vid, name, description, weight 
       FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
     while ($t = db_fetch_object($result)) {
       $output .= _site_map_taxonomy_tree($t->vid, $t->name, $t->description);
@@ -309,6 +350,11 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   }
 
   $output = $description ? '<div class="description">'. check_plain($description) .'</div>' : '';
+
+/*   if ($name == 'Forum' && module_exist('views')) { */
+/*     $output .= '<p>'. l(t('Forum page'), 'forum') . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'tracker/forum/feed', array('class' => 'rss', 'title' => t('Syndicate content'))) . (module_exist('commentrss') ? ' '. l(t('C-RSS'), 'crss/vocab/'. $vid, array('class' => 'rss', 'title' => t('Syndicate comments'))) : '') : '') .'</p>'; */
+/*   } */
+
   $output .= '<div class="tree">';
 
   // taxonomy_get_tree() honors access controls
@@ -329,7 +375,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     // Display the $term.
     $output .= '<li>';
     $term->count = taxonomy_term_count_nodes($term->tid);
-    if ($term->count){
+    if ($term->count) {
       $output .= l($term->name, "taxonomy/term/$term->tid/$cat_depth", array('title' => $term->description));
     }
     else {
