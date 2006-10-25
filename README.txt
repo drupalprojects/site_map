@@ -8,16 +8,20 @@ License - GPL (see LICENSE)
 
 Overview:
 --------
-This module provides a site map that gives visitors an overview of your site. It can also display the RSS feeds for all blogs and categories. Drupal generates the RSS feeds automatically but few seems to be aware that they exist.
+This module provides a site map that gives visitors an overview of 
+your site. It can also display the RSS feeds for all blogs and 
+categories. Drupal generates the RSS feeds automatically but few seems 
+to be aware that they exist.
 
 The site map can display the following items:
 
 * A message to be displayed above the site map
 * The latest blogs.
-* Any books with titles and optionally expanded.
-* An optional menu that will be displayed fully expanded.
+* Any books that optionally will be displayed fully expanded.
+* Any menus that will be displayed fully expanded.
 * Any categories, i.e vocabulary, with all the terms expanded.
   Optionally with node counts and RSS feeds.
+* A syndication block, the "more" link goes to the site map.
 
 Support for menus was contributed by keve. Blogs, books and layout
 changes by frjo. The rest is by the original author.
