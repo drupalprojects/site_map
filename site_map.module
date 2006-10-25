@@ -162,6 +162,32 @@ function site_map_menu($may_cache) {
 }
 
 /**
+ * Implementation of hook_block().
+ */
+function site_map_block($op = 'list', $delta = 0) {
+  if ($op == 'list') {
+    $blocks[0]['info'] = t('Syndicate (site map)');
+    return $blocks;
+  }
+  else if ($op == 'view') {
+    if (user_access('access content')) {
+      $block['subject'] = t('Syndicate');
+      if (arg(0) == 'blog') {
+        $uid = arg(1);
+        $feedurl = is_numeric($uid) ? "blog/$uid/feed" : 'blog/feed';
+      }
+      else {
+        $feedurl = 'rss.xml';
+      }
+      $block['content'] = theme('feed_icon', url($feedurl));
+      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array ('title' => t('View the site map to see more RSS feeds.'))). "</div>\n";
+
+      return $block;
+    }
+  }
+}
+
+/**
  * Menu callback for the site map.
  */
 function site_map_page() {
@@ -227,7 +253,7 @@ function _site_map_blogs() {
 
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. l(t('RSS'), 'blog/feed', array('class' => 'rss', 'title' => t('Syndicate content'))) : '');
-    $result = db_query_range("SELECT DISTINCT u.uid, u.name, n.created 
+    $result = db_query_range("SELECT DISTINCT u.uid, u.name 
       FROM {users} u 
       INNER JOIN {node} n ON u.uid = n.uid 
       WHERE n.type = 'blog' AND n.status = 1 ORDER BY n.created DESC", 0, 10);
@@ -319,7 +345,7 @@ function _site_map_menu_tree($pid = 1, $menu = NULL) {
  */
 function _site_map_taxonomys() {
   if (module_exist('taxonomy') && $vids = variable_get('site_map_show_vocabularies', array())) {
-    $result = db_query('SELECT vid, name, description, weight 
+    $result = db_query('SELECT vid, name, description 
       FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
     while ($t = db_fetch_object($result)) {
       $output .= _site_map_taxonomy_tree($t->vid, $t->name, $t->description);
