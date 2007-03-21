@@ -189,7 +189,7 @@ function site_map_block($op = 'list', $delta = 0) {
         $feedurl = 'rss.xml';
       }
       $block['content'] = theme('feed_icon', url($feedurl));
-      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array ('title' => t('View the site map to see more RSS feeds.'))). "</div>\n";
+      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) ."</div>\n";
 
       return $block;
     }
@@ -414,7 +414,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $term->count = taxonomy_term_count_nodes($term->tid);
     if ($term->count) {
       if ($cat_depth < 0) {
-       $output .= l($term->name, "taxonomy/term/$term->tid", array('title' => $term->description));   
+       $output .= l($term->name, taxonomy_term_path($term), array('title' => $term->description));   
       }
       else {
        $output .= l($term->name, "taxonomy/term/$term->tid/$cat_depth", array('title' => $term->description)); 
