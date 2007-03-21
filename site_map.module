@@ -123,7 +123,7 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_categories_depth', 'all'),
     '#size' => 3,
     '#maxlength' => 10,
-    '#description' => t('Specify how many subcategories should be included on the categorie page.  Enter "all" to include all subcategories,"0" to include no subcategories, or "-1" not to append the depth at all.'),
+    '#description' => t('Specify how many subcategories should be included on the categorie page. Enter "all" to include all subcategories,"0" to include no subcategories, or "-1" not to append the depth at all.'),
   );
 
   $form['site_map_rss_options'] = array(
@@ -143,7 +143,7 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_rss_depth', 'all'),
     '#size' => 3,
     '#maxlength' => 10,
-    '#description' => t('Specify how many subcategories should be included in the RSS feed.  Enter "all" to include all subcategories or "0" to include no subcategories.'),
+    '#description' => t('Specify how many subcategories should be included in the RSS feed. Enter "all" to include all subcategories or "0" to include no subcategories.'),
   );
 
   return system_settings_form($form);
@@ -196,7 +196,7 @@ function site_map_block($op = 'list', $delta = 0) {
         $feedurl = 'rss.xml';
       }
       $block['content'] = theme('feed_icon', url($feedurl));
-      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array ('title' => t('View the site map to see more RSS feeds.'))). "</div>\n";
+      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) ."</div>\n";
 
       return $block;
     }
@@ -227,11 +227,11 @@ function theme_site_map_display() {
     $output .= '</p>';
   }
 
-  if (variable_get('site_map_show_front', 0)) {
+  if (variable_get('site_map_show_front', 1)) {
     $output .= _site_map_front_page();
   }
 
-  if (variable_get('site_map_show_blogs', 0)) {
+  if (variable_get('site_map_show_blogs', 1)) {
     $output .= _site_map_blogs();
   }
 
@@ -315,7 +315,7 @@ function _site_map_books() {
     $result = db_query(db_rewrite_sql('SELECT n.nid, n.title FROM {node} n INNER JOIN {book} b ON n.vid = b.vid WHERE b.parent = 0 AND n.status = 1 AND n.moderate = 0 AND n.nid IN (%s) ORDER BY b.weight, n.title'), implode(',', $nids));
     while ($node = db_fetch_object($result)) {
       $book_display .= '<h3>'. l($node->title, 'node/'. $node->nid) .'</h3>';
-      $book_display .= book_tree($node->nid, 5 , array(variable_get('site_map_books_expanded', 0) ? TRUE : ''));
+      $book_display .= book_tree($node->nid, 5 , array(variable_get('site_map_books_expanded', 1) ? TRUE : ''));
     }
 
     if ($book_display) {
@@ -421,7 +421,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $term->count = taxonomy_term_count_nodes($term->tid);
     if ($term->count) {
       if ($cat_depth < 0) {
-       $output .= l($term->name, "taxonomy/term/$term->tid", array('title' => $term->description));   
+       $output .= l($term->name, taxonomy_term_path($term), array('title' => $term->description));   
       }
       else {
        $output .= l($term->name, "taxonomy/term/$term->tid/$cat_depth", array('title' => $term->description)); 
