@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation for site_map module\n"
 "POT-Creation-Date: 2007-03-02 11:32+0100\n"
-"PO-Revision-Date: 2007-03-31 11:36+0100\n"
+"PO-Revision-Date: 2007-04-02 20:17+0100\n"
 "Last-Translator: Alexander Hass\n"
 "Language-Team: Alexander Hass\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr "Anzeigetiefe der Kategorien"
 
 #: site_map.module:126
 msgid "Specify how many subcategories should be included on the categorie page. Enter \"all\" to include all subcategories,\"0\" to include no subcategories, or \"-1\" not to append the depth at all."
-msgstr "Legt die Anzahl der in den Kategorien anzuzeigenden Unterkategorien fest. Alle Unterkategorien werden mit \"all\" angezeigt, keine Unterkategorien mit \"0\" oder \"1\" damit nicht die gesamte Tiefe angezeigt wird."
+msgstr "Legt die Anzahl der in den Kategorien anzuzeigenden Unterkategorien fest. Alle Unterkategorien werden mit „all“ angezeigt, keine Unterkategorien mit „0“ oder „1“ damit nicht die gesamte Tiefe angezeigt wird."
 
 #: site_map.module:131
 msgid "RSS settings"
@@ -111,7 +111,7 @@ msgstr "Anzeigetiefe der RSS Feeds"
 
 #: site_map.module:146
 msgid "Specify how many subcategories should be included in the RSS feed. Enter \"all\" to include all subcategories or \"0\" to include no subcategories."
-msgstr "Legt die Anzahl der in den RSS Feeds anzuzeigenden Unterkategorien fest. Alle Unterkategorien werden mit \"all\" angezeigt oder keine Unterkategorien mit \"0\"."
+msgstr "Legt die Anzahl der in den RSS Feeds anzuzeigenden Unterkategorien fest. Alle Unterkategorien werden mit „all“ angezeigt oder keine Unterkategorien mit „0“."
 
 #: site_map.module:161;170
 #: site_map.info:0
