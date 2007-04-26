@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation for site_map module\n"
 "POT-Creation-Date: 2007-03-02 11:32+0100\n"
-"PO-Revision-Date: 2007-04-02 20:17+0100\n"
+"PO-Revision-Date: 2007-04-26 20:03+0100\n"
 "Last-Translator: Alexander Hass\n"
 "Language-Team: Alexander Hass\n"
 "MIME-Version: 1.0\n"
@@ -79,11 +79,11 @@ msgstr "Sobald diese Einstellung aktiviert ist, werden alle Unterseiten von Büc
 
 #: site_map.module:115
 msgid "Show node counts by categories"
-msgstr "Die Anzahl der Nodes pro Kategorie anzeigen"
+msgstr "Die Anzahl der Beiträge pro Kategorie anzeigen"
 
 #: site_map.module:118
 msgid "When enabled, this option will show the number of nodes in each taxonomy term."
-msgstr "Sobald diese Einstellung aktiviert ist, wird die Anzahl der Nodes zu jedem Taxonomiebegriff angezeigt."
+msgstr "Sobald diese Einstellung aktiviert ist, wird die Anzahl der Beiträge zu jedem Taxonomiebegriff angezeigt."
 
 #: site_map.module:122
 msgid "Categories depth"
