@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation for site_map module\n"
 "POT-Creation-Date: 2007-03-02 11:32+0100\n"
-"PO-Revision-Date: 2007-04-26 20:03+0100\n"
+"PO-Revision-Date: 2007-05-26 14:50+0100\n"
 "Last-Translator: Alexander Hass\n"
 "Language-Team: Alexander Hass\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,7 @@ msgstr "C-RSS"
 
 #: site_map.module:225
 msgid "This is a link to a comment RSS feed"
-msgstr "Dies ist ein Link zu einem RSS Feed mit Kommentaren"
+msgstr "Dies ist ein Link zu einem kommentierten RSS Feed"
 
 #: site_map.module:257
 msgid "Front page"
