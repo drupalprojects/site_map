@@ -1,3 +1,4 @@
 ; $Id$
 name = Site map
 description = Display a site map.
+version = "$Name$"
