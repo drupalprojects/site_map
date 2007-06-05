@@ -245,6 +245,12 @@ function theme_site_map_display() {
   // Compile the vocabulary trees.
   $output .= _site_map_taxonomys();
 
+  // Invoke all custom modules and get themed HTML to be integrated into the site map.
+  $additional = module_invoke_all('site_map');
+  foreach ($additional as $themed_site_map_code) {
+    $output .= $themed_site_map_code;
+  }
+
   $output = '<div class="site-map">'. $output .'</div>';
 
   return $output;
