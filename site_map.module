@@ -82,6 +82,13 @@ function site_map_admin_settings() {
     '#multiple' => TRUE,
     '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
+  $form['site_map_content']['site_map_show_faq'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show FAQ content'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('site_map_show_faq', 1),
+    '#description' => t('When enabled, this option will include the content from the FAQ module in the site map.'),
+  );
   $vocab_options = array();
   if (module_exists('taxonomy')) {
     foreach (taxonomy_get_vocabularies() as $vocabulary) {
@@ -242,6 +249,10 @@ function theme_site_map_display() {
   // Compile the menu trees.
   $output .= _site_map_menus();
 
+  if (variable_get('site_map_show_faq', 1)) {
+    $output .= _site_map_faq();
+  }
+
   // Compile the vocabulary trees.
   $output .= _site_map_taxonomys();
 
@@ -352,13 +363,26 @@ function _site_map_books() {
  * Render menus
  */
 function _site_map_menus() {
+  $output = '';
   if ($mids = variable_get('site_map_show_menus', array())) {
     $menu = menu_get_menu();
     foreach ($mids as $mid) {
-      $title = $menu['visible'][$mid]['title'];
       $menu_display = _site_map_menu_tree($mid, $menu);
-      $output .= theme('box', $title, $menu_display);
+      if (!empty($menu_display)) {
+        $title = $menu['visible'][$mid]['title'];
+        $output .= theme('box', $title, $menu_display);
+      }
     }
+  }
+
+  return $output;
+}
+
+function _site_map_faq() {
+  if (module_exists('faq')) {
+    $title = variable_get('faq_title', t('Frequently Asked Questions'));
+    $output = faq_get_faq_list();
+    $output = theme('box', $title, $output);
   }
 
   return $output;
@@ -373,7 +397,7 @@ function _site_map_menu_tree($pid = 1, $menu = NULL) {
     }
   }
   if ($menu_tree) {
-    $output = '<ul class="tree">'. $menu_tree .'</ul>';
+    $output = '<ul class="menu">'. $menu_tree .'</ul>';
   }
 
   return $output;
@@ -452,7 +476,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
       }
     }
     else {
-       $output .= check_plain($term->name);
+      $output .= check_plain($term->name);
     }
     if (variable_get('site_map_show_count', 1)) {
       $output .= " ($term->count)";

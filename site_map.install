@@ -9,6 +9,7 @@ function site_map_uninstall() {
   variable_del('site_map_show_blogs');
   variable_del('site_map_show_books');
   variable_del('site_map_show_menus');
+  variable_del('site_map_show_faq');
   variable_del('site_map_show_vocabularies');
   variable_del('site_map_books_expanded');
   variable_del('site_map_show_count');
