@@ -13,7 +13,7 @@
 function site_map_help($section) {
   switch ($section) {
     case 'sitemap':
-      $output = variable_get('site_map_message', '');
+      $output = _sitemap_get_message();
       return $output ? '<p>'. $output .'</p>' : '';
   }
 }
@@ -30,14 +30,34 @@ function site_map_perm() {
  */
 function site_map_admin_settings() {
 
-  $form['site_map_message'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Site map message'),
-    '#default_value' => variable_get('site_map_message', ''),
-    '#cols' => 60,
-    '#rows' => 5,
-    '#description' => t('Define a message to be displayed above the site map.'),
-  );
+  // Field to set site map message. Nifty language support from the catcha module,thanks.
+  if (module_exists('locale')) {
+    $langs = locale_supported_languages();
+    $form['site_map_message'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Site map message'),
+      '#description' => t('Define a message to be displayed above the site map.'),
+    );
+    foreach ($langs['name'] as $lang_code => $lang_name) {
+      $form['site_map_message']["site_map_message_$lang_code"] = array(
+        '#type' => 'textarea',
+        '#title' => t('For language %lang_name (code %lang_code)', array('%lang_name' => $lang_name, '%lang_code' => $lang_code)),
+        '#default_value' => _sitemap_get_message($lang_code),
+        '#cols' => 60,
+        '#rows' => 5,
+      );
+    }
+  }
+  else {
+    $form['site_map_message'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Site map message'),
+      '#default_value' => _sitemap_get_message(),
+      '#cols' => 60,
+      '#rows' => 5,
+      '#description' => t('Define a message to be displayed above the site map.'),
+    );
+  }
 
   $form['site_map_content'] = array(
     '#type' => 'fieldset',
@@ -52,10 +72,10 @@ function site_map_admin_settings() {
   );
   $form['site_map_content']['site_map_show_blogs'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show recent blog authors'),
+    '#title' => t('Show active blog authors'),
     '#return_value' => 1,
     '#default_value' => variable_get('site_map_show_blogs', 1),
-    '#description' => t('When enabled, this option will show the recent blog authors.'),
+    '#description' => t('When enabled, this option will show the 10 most active blog authors.'),
   );
   $book_options = array();
   if (module_exists('book')) {
@@ -304,12 +324,18 @@ function _site_map_blogs() {
 
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('blog/feed')) : '');
-    $result = db_query_range("SELECT DISTINCT u.uid, u.name 
-      FROM {users} u 
-      INNER JOIN {node} n ON u.uid = n.uid 
-      WHERE n.type = 'blog' AND n.status = 1 ORDER BY n.created DESC", 0, 10);
-    while ($account = db_fetch_object($result)) {
-      $blogs[] = l(t("!s's blog", array("!s" => $account->name)), "blog/$account->uid") . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$account->uid/feed")) : '');
+
+    $sql = "SELECT DISTINCT u.uid, u.name, count(u.uid) AS numitems 
+      FROM {node} n 
+      INNER JOIN {users} u ON u.uid = n.uid 
+      WHERE n.type = 'blog' and n.status = 1 
+      GROUP BY n.uid 
+      ORDER BY numitems DESC, u.name";
+    $result = db_query_range($sql, 0, 10);
+
+
+    while ($blog = db_fetch_object($result)) {
+      $blogs[] = l(t("!s's blog", array("!s" => $blog->name)), "blog/$blog->uid") .' ('. $blog->numitems .')'. (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$blog->uid/feed")) : '');
     }
     $output .= theme('item_list', $blogs);
     $output = theme('box', $title, $output);
@@ -503,4 +529,23 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   $output = theme('box', $title, $output);
 
   return $output;
+}
+
+/**
+ * Get the message which appears above the site map.
+ * If the locale module is enabled, an optional language code can be given
+ */
+function _sitemap_get_message($lang_code = NULL) {
+  if (module_exists('locale')) {
+    if ($lang_code == NULL) {
+      global $locale;
+      $lang_code = $locale;
+    }
+    $message = variable_get("site_map_message_$lang_code", '');
+  }
+  else {
+    $message = variable_get('site_map_message', '');
+  }
+
+  return $message;
 }
