@@ -423,7 +423,7 @@ function _site_map_menu_tree($pid = 1, $menu = NULL) {
     }
   }
   if ($menu_tree) {
-    $output = '<ul class="menu">'. $menu_tree .'</ul>';
+    $output = '<ul class="tree">'. $menu_tree .'</ul>';
   }
 
   return $output;
