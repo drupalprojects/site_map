@@ -6,6 +6,7 @@
  */
 function site_map_uninstall() {
   variable_del('site_map_message');
+  variable_del('site_map_show_front');
   variable_del('site_map_show_blogs');
   variable_del('site_map_show_books');
   variable_del('site_map_show_menus');

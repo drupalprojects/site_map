@@ -81,7 +81,7 @@ function site_map_block($op = 'list', $delta = 0) {
       else {
         $feedurl = 'rss.xml';
       }
-      $block['content'] = theme('feed_icon', url($feedurl));
+      $block['content'] = theme('feed_icon', url($feedurl), t('Syndicate'));
       $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) ."</div>\n";
 
       return $block;
