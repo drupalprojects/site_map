@@ -29,7 +29,8 @@ changes by frjo. The rest is by the original author.
 
 Installation:
 ------------
-1. Copy the site_map directory to the Drupal modules/ directory.
+1. Place this module directory in your modules folder (this will
+   usually be "sites/all/modules/").
 2. Go to "administer" -> "modules" and enable the module.
 3. Check the "administer" -> "access control" page to enable use of
    this module to different roles.
