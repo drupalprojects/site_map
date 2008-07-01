@@ -13,7 +13,7 @@
 function site_map_help($path, $arg) {
   switch ($path) {
     case 'sitemap':
-      $output = variable_get('site_map_message', '');
+      $output = _sitemap_get_message();
       return $output ? '<p>'. $output .'</p>' : '';
   }
 }
@@ -378,4 +378,23 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   $output = theme('box', $title, $output);
 
   return $output;
+}
+
+/**
+ * Get the message which appears above the site map.
+ * If the locale module is enabled, an optional language code can be given
+ */
+function _sitemap_get_message($lang_code = NULL) {
+  if (module_exists('locale')) {
+    if ($lang_code == NULL) {
+      global $locale;
+      $lang_code = $locale;
+    }
+    $message = variable_get("site_map_message_$lang_code", '');
+  }
+  else {
+    $message = variable_get('site_map_message', '');
+  }
+
+  return $message;
 }
