@@ -14,13 +14,13 @@ function site_map_admin_settings() {
 
   // Field to set site map message. Nifty language support from the catcha module, thanks.
   if (module_exists('locale')) {
-    $langs = locale_supported_languages();
+    $langs = locale_language_list();
     $form['site_map_message'] = array(
       '#type' => 'fieldset',
       '#title' => t('Site map message'),
       '#description' => t('Define a message to be displayed above the site map.'),
     );
-    foreach ($langs['name'] as $lang_code => $lang_name) {
+    foreach ($langs as $lang_code => $lang_name) {
       $form['site_map_message']["site_map_message_$lang_code"] = array(
         '#type' => 'textarea',
         '#title' => t('For language %lang_name (code %lang_code)', array('%lang_name' => $lang_name, '%lang_code' => $lang_code)),
