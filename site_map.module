@@ -285,7 +285,7 @@ function _site_map_faq() {
 function _site_map_taxonomys() {
   $output = '';
   if (module_exists('taxonomy') && $vids = variable_get('site_map_show_vocabularies', array())) {
-    $result = db_query('SELECT vid, name, description FROM {vocabulary} WHERE vid IN ('. db_placeholders($vids, 'int') .') ORDER BY weight ASC, name');
+    $result = db_query('SELECT vid, name, description FROM {vocabulary} WHERE vid IN ('. db_placeholders($vids, 'int') .') ORDER BY weight ASC, name', $vids);
     while ($t = db_fetch_object($result)) {
       $output .= _site_map_taxonomy_tree($t->vid, $t->name, $t->description);
     }
