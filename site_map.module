@@ -257,7 +257,9 @@ function _site_map_menus() {
   if ($mids = variable_get('site_map_show_menus', array())) {
     foreach ($mids as $mid) {
       $menu = menu_load($mid);
-      $menu_display = menu_tree($mid);
+      // Use menu_tree_all_data to retrieve the expanded tree.
+      $tree = menu_tree_all_data($mid);
+      $menu_display = menu_tree_output($tree);
       if (!empty($menu_display)) {
         $title = $menu['title'];
         $output .= theme('box', $title, $menu_display);
