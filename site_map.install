@@ -19,8 +19,8 @@ function site_map_uninstall() {
   variable_del('site_map_rss_depth');
 
   if (function_exists('locale')) {
-    $langs = locale_supported_languages();
-    foreach ($langs['name'] as $lang_code => $lang_name) {
+    $langs = locale_language_list();
+    foreach ($langs as $lang_code => $lang_name) {
       variable_del("site_map_message_$lang_code");
     }
   }
