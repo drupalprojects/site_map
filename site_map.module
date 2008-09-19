@@ -33,6 +33,9 @@ function site_map_theme() {
     'site_map_display' => array(
       'arguments' => array(),
     ),
+    'site_map_box' => array(
+      'arguments' => array('title' => NULL, 'content' => NULL, 'class' => ''),
+    ),
     'site_map_feed_icon' => array(
       'arguments' => array('url' => NULL, 'type' => 'node'),
     ),
@@ -147,6 +150,22 @@ function theme_site_map_display() {
   return $output;
 }
 
+/**
+ * Return a themed sitemap box.
+ *
+ * @param $title
+ *   The subject of the box.
+ * @param $content
+ *   The content of the box.
+ * @param $class
+ *   Optional extra class for the box.
+ * @return
+ *   A string containing the box output.
+ */
+function theme_site_map_box($title, $content, $class = '') {
+  return  '<div class="sitemap-box '. check_plain($class) .'"><h2 class="title">'. $title .'</h2><div class="content">'. $content .'</div></div>';
+}
+
 function theme_site_map_feed_icon($url, $type = 'node') {
   $output = '';
 
@@ -171,7 +190,7 @@ function theme_site_map_feed_icon($url, $type = 'node') {
 function _site_map_front_page() {
   $title = t('Front page');
   $output = l(t("Front page of %sn", array("%sn" => variable_get('site_name', 'Drupal'))), '<front>', array('html' => TRUE)) . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('rss.xml')) . (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url('crss'), 'comment') : '') : '');
-  $output = theme('box', $title, $output);
+  $output = theme('site_map_box', $title, $output, 'sitemap-front');
 
   return $output;
 }
@@ -195,7 +214,7 @@ function _site_map_blogs() {
       $blogs[] = l(t("!s's blog", array("!s" => $account->name)), "blog/$account->uid") . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$account->uid/feed")) : '');
     }
     $output .= theme('item_list', $blogs);
-    $output = theme('box', $title, $output);
+    $output = theme('site_map_box', $title, $output, 'sitemap-blog');
   }
 
   return $output;
@@ -206,7 +225,7 @@ function _site_map_audio() {
   if (module_exists('audio')) {
     $title = t('Audio');
     $output = l(t('Audio content'), 'audio') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('audio/feed')) : '');
-    $output = theme('box', $title, $output);
+    $output = theme('site_map_box', $title, $output, 'sitemap-audio');
   }
 
   return $output;
@@ -217,7 +236,7 @@ function _site_map_video() {
   if (module_exists('video')) {
     $title = t('Video');
     $output = l(t('Video content'), 'video') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('video/feed')) : '');
-    $output = theme('box', $title, $output);
+    $output = theme('site_map_box', $title, $output, 'sitemap-video');
   }
 
   return $output;
@@ -242,7 +261,7 @@ function _site_map_books() {
     }
 
     if ($output) {
-      $output = theme('box', $title, $description . $output);
+      $output = theme('site_map_box', $title, $description . $output, 'sitemap-book');
     }
   }
 
@@ -262,7 +281,7 @@ function _site_map_menus() {
       $menu_display = menu_tree_output($tree);
       if (!empty($menu_display)) {
         $title = $menu['title'];
-        $output .= theme('box', $title, $menu_display);
+        $output .= theme('site_map_box', $title, $menu_display, 'sitemap-menu');
       }
     }
   }
@@ -275,7 +294,7 @@ function _site_map_faq() {
   if (module_exists('faq')) {
     $title = variable_get('faq_title', t('Frequently Asked Questions'));
     $output = faq_get_faq_list();
-    $output = theme('box', $title, $output);
+    $output = theme('site_map_box', $title, $output, 'sitemap-faq');
   }
 
   return $output;
@@ -377,7 +396,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     }
   }
   $output .= "</div>\n";
-  $output = theme('box', $title, $output);
+  $output = theme('site_map_box', $title, $output, 'sitemap-terms sitemap-terms-'. $vid);
 
   return $output;
 }
