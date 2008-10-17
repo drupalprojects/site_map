@@ -75,14 +75,17 @@ function site_map_admin_settings() {
   );
   $menu_options = array();
   $menu_options = menu_get_menus();
-  $form['site_map_content']['site_map_show_menus'] = array(
-    '#type' => 'select',
-    '#title' => t('Menus to include in the site map'),
-    '#default_value' => variable_get('site_map_show_menus', array()),
-    '#options' => $menu_options,
-    '#multiple' => TRUE,
-    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
-  );
+
+  foreach ($langs as $lang_code => $lang_name) {
+    $form['site_map_content']['site_map_show_menus'. $lang_code] = array(
+      '#type' => 'select',
+      '#title' => t('Menus to include in the site map for !lang (code !code)', array('!lang' => $lang_name, '!code' => $lang_code)),
+      '#default_value' => variable_get('site_map_show_menus'. $lang_code, array()),
+      '#options' => $menu_options,
+      '#multiple' => TRUE,
+      '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
+    );
+  }
   $form['site_map_content']['site_map_show_faq'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show FAQ content'),

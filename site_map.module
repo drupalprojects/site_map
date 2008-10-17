@@ -272,8 +272,10 @@ function _site_map_books() {
  * Render menus
  */
 function _site_map_menus() {
+  global $language;
+
   $output = '';
-  if ($mids = variable_get('site_map_show_menus', array())) {
+  if ($mids = variable_get('site_map_show_menus'. $language->language, array())) {
     foreach ($mids as $mid) {
       $menu = menu_load($mid);
       // Use menu_tree_all_data to retrieve the expanded tree.
