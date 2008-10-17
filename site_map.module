@@ -410,8 +410,8 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
 function _sitemap_get_message($lang_code = NULL) {
   if (module_exists('locale')) {
     if ($lang_code == NULL) {
-      global $locale;
-      $lang_code = $locale;
+      global $language;
+      $lang_code = $language->language;
     }
     $message = variable_get("site_map_message_$lang_code", '');
   }

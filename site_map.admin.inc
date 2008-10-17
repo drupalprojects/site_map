@@ -12,9 +12,11 @@
  */
 function site_map_admin_settings() {
 
-  // Field to set site map message. Nifty language support from the catcha module, thanks.
   if (module_exists('locale')) {
     $langs = locale_language_list();
+  }
+  // Field to set site map message. Nifty language support from the catcha module, thanks.
+  if ($langs) {
     $form['site_map_message'] = array(
       '#type' => 'fieldset',
       '#title' => t('Site map message'),
@@ -76,11 +78,23 @@ function site_map_admin_settings() {
   $menu_options = array();
   $menu_options = menu_get_menus();
 
-  foreach ($langs as $lang_code => $lang_name) {
-    $form['site_map_content']['site_map_show_menus'. $lang_code] = array(
+  if ($langs) {
+    foreach ($langs as $lang_code => $lang_name) {
+      $form['site_map_content']['site_map_show_menus'. $lang_code] = array(
+        '#type' => 'select',
+        '#title' => t('Menus to include in the site map for !lang (code !code)', array('!lang' => $lang_name, '!code' => $lang_code)),
+        '#default_value' => variable_get('site_map_show_menus'. $lang_code, array()),
+        '#options' => $menu_options,
+        '#multiple' => TRUE,
+        '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
+      );
+    }
+  }
+  else {
+    $form['site_map_content']['site_map_show_menus'] = array(
       '#type' => 'select',
-      '#title' => t('Menus to include in the site map for !lang (code !code)', array('!lang' => $lang_name, '!code' => $lang_code)),
-      '#default_value' => variable_get('site_map_show_menus'. $lang_code, array()),
+      '#title' => t('Menus to include in the site map'),
+      '#default_value' => variable_get('site_map_show_menus', array()),
       '#options' => $menu_options,
       '#multiple' => TRUE,
       '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
