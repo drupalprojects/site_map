@@ -80,10 +80,10 @@ function site_map_admin_settings() {
 
   if ($langs) {
     foreach ($langs as $lang_code => $lang_name) {
-      $form['site_map_content']['site_map_show_menus'. $lang_code] = array(
+      $form['site_map_content']["site_map_show_menus_$lang_code"] = array(
         '#type' => 'select',
         '#title' => t('Menus to include in the site map for !lang (code !code)', array('!lang' => $lang_name, '!code' => $lang_code)),
-        '#default_value' => variable_get('site_map_show_menus'. $lang_code, array()),
+        '#default_value' => variable_get("site_map_show_menus_$lang_code", array()),
         '#options' => $menu_options,
         '#multiple' => TRUE,
         '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
