@@ -275,7 +275,7 @@ function _site_map_menus() {
   global $language;
 
   if (module_exists('locale')) {
-    $mids = variable_get('site_map_show_menus'. $language->language, array());
+    $mids = variable_get('site_map_show_menus_'. $language->language, array());
   }
   else {
     $mids = variable_get('site_map_show_menus', array());
