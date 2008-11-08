@@ -287,6 +287,9 @@ function _site_map_menus() {
       $menu = menu_load($mid);
       // Use menu_tree_all_data to retrieve the expanded tree.
       $tree = menu_tree_all_data($mid);
+      if (module_exists('i18nmenu')) {
+        i18nmenu_localize_tree($tree);
+      }
       $menu_display = menu_tree_output($tree);
       if (!empty($menu_display)) {
         $title = $menu['title'];
