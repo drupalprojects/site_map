@@ -325,11 +325,11 @@ function _site_map_blogs() {
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('blog/feed')) : '');
 
-    $sql = "SELECT DISTINCT u.uid, u.name, count(u.uid) AS numitems 
-      FROM {node} n 
-      INNER JOIN {users} u ON u.uid = n.uid 
-      WHERE n.type = 'blog' and n.status = 1 
-      GROUP BY n.uid 
+    $sql = "SELECT DISTINCT u.uid, u.name, count(u.uid) AS numitems
+      FROM {node} n
+      INNER JOIN {users} u ON u.uid = n.uid
+      WHERE n.type = 'blog' and n.status = 1
+      GROUP BY u.uid
       ORDER BY numitems DESC, u.name";
     $result = db_query_range($sql, 0, 10);
 
@@ -435,7 +435,7 @@ function _site_map_menu_tree($pid = 1, $menu = NULL) {
  */
 function _site_map_taxonomys() {
   if (module_exists('taxonomy') && $vids = variable_get('site_map_show_vocabularies', array())) {
-    $result = db_query('SELECT vid, name, description 
+    $result = db_query('SELECT vid, name, description
       FROM {vocabulary} WHERE vid IN (%s) ORDER BY weight ASC, name', implode(',', $vids));
     while ($t = db_fetch_object($result)) {
       $output .= _site_map_taxonomy_tree($t->vid, $t->name, $t->description);
@@ -458,7 +458,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $title = l($name, 'forum');
   }
   else {
-    $title = $name ? check_plain($name) : '';
+    $title = $name ? check_plain(t($name)) : '';
   }
   $title .= (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url("crss/vocab/$vid"), 'comment') : '');
 
