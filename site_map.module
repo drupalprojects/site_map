@@ -52,7 +52,7 @@ function site_map_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('site_map_admin_settings'),
     'access arguments' => array('administer site configuration'),
-    'file' => 'site_map.admin.inc',  
+    'file' => 'site_map.admin.inc',
     'type' => MENU_NORMAL_ITEM,
   );
   $items['sitemap'] = array(
@@ -206,12 +206,15 @@ function _site_map_blogs() {
 
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('blog/feed')) : '');
-    $result = db_query_range("SELECT DISTINCT u.uid, u.name 
-      FROM {users} u 
-      INNER JOIN {node} n ON u.uid = n.uid 
-      WHERE n.type = 'blog' AND n.status = 1 ORDER BY n.created DESC", 0, 10);
-    while ($account = db_fetch_object($result)) {
-      $blogs[] = l(t("!s's blog", array("!s" => $account->name)), "blog/$account->uid") . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$account->uid/feed")) : '');
+    $sql = "SELECT DISTINCT u.uid, u.name, count(u.uid) AS numitems
+      FROM {node} n
+      INNER JOIN {users} u ON u.uid = n.uid
+      WHERE n.type = 'blog' AND n.status = 1
+      GROUP BY u.uid
+      ORDER BY numitems DESC, u.name";
+    $result = db_query_range($sql, 0, 10);
+    while ($blog = db_fetch_object($result)) {
+      $blogs[] = l(t("!s's blog", array("!s" => $blog->name)), "blog/$blog->uid") .' ('. $blog->numitems .')'. (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$blog->uid/feed")) : '');
     }
     $output .= theme('item_list', $blogs);
     $output = theme('site_map_box', $title, $output, 'sitemap-blog');
@@ -340,7 +343,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $title = l($name, 'forum');
   }
   else {
-    $title = $name ? check_plain($name) : '';
+    $title = $name ? check_plain(t($name)) : '';
   }
   $title .= (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url("crss/vocab/$vid"), 'comment') : '');
 
