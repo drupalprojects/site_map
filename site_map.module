@@ -108,7 +108,7 @@ function theme_site_map_display() {
 
   if (variable_get('site_map_show_rss_links', 1)) {
     $output .= '<p><span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('This is a link to a content RSS feed');
-    if (module_exists('commentrss')) {
+    if (module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
       $output .= '<br /><span class="rss">'. theme('site_map_feed_icon', NULL, 'comment') .'</span> '. t('This is a link to a comment RSS feed');
     }
     $output .= '</p>';
@@ -189,10 +189,16 @@ function theme_site_map_feed_icon($url, $type = 'node') {
 
 function _site_map_front_page() {
   $title = t('Front page');
-  $output = l(t("Front page of %sn", array("%sn" => variable_get('site_name', 'Drupal'))), '<front>', array('html' => TRUE)) . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('rss.xml')) . (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url('crss'), 'comment') : '') : '');
-  $output = theme('site_map_box', $title, $output, 'sitemap-front');
+  $output = l(t("Front page of %sn", array("%sn" => variable_get('site_name', 'Drupal'))), '<front>', array('html' => TRUE));
 
-  return $output;
+  if (variable_get('site_map_show_rss_links', 1)) {
+    $output .= ' '. theme('site_map_feed_icon', url('rss.xml'));
+    if (module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
+      $output .= ' '. theme('site_map_feed_icon', url('crss'), 'comment');
+    }
+  }
+
+  return theme('site_map_box', $title, $output, 'sitemap-front');
 }
 
 /**
@@ -345,7 +351,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   else {
     $title = $name ? check_plain(t($name)) : '';
   }
-  $title .= (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url("crss/vocab/$vid"), 'comment') : '');
+  $title .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', url("crss/vocab/$vid"), 'comment') : '');
 
   $last_depth = -1;
   $rss_depth = variable_get('site_map_rss_depth', 'all');
@@ -394,7 +400,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     }
     if (variable_get('site_map_show_rss_links', 1)) {
       $output .= ' '. theme('site_map_feed_icon', url("taxonomy/term/$term->tid/$rss_depth/feed"));
-      $output .= (module_exists('commentrss') ? ' '. theme('site_map_feed_icon', url("crss/term/$term->tid"), 'comment') : '');
+      $output .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', url("crss/term/$term->tid"), 'comment') : '');
     }
 
 
