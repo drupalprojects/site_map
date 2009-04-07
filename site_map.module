@@ -192,7 +192,7 @@ function _site_map_front_page() {
   $output = l(t("Front page of %sn", array("%sn" => variable_get('site_name', 'Drupal'))), '<front>', array('html' => TRUE));
 
   if (variable_get('site_map_show_rss_links', 1)) {
-    $output .= ' '. theme('site_map_feed_icon', url('rss.xml'));
+    $output .= ' '. theme('site_map_feed_icon', url(variable_get('site_map_rss_front', 'rss.xml')));
     if (module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
       $output .= ' '. theme('site_map_feed_icon', url('crss'), 'comment');
     }
@@ -363,7 +363,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $cat_depth = 'all';
   }
 
-  $output = $description ? '<div class="description">'. check_plain($description) .'</div>' : '';
+  $output = $description ? '<div class="description">'. check_plain($description) ."</div>\n" : '';
 
   $output .= '<div class="tree">';
   // taxonomy_get_tree() honors access controls
@@ -373,24 +373,22 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     // in $term->depth since the $last_depth.
     if ($term->depth > $last_depth) {
       for ($i = 0; $i < ($term->depth - $last_depth); $i++) {
-        $output .= '<ul>';
+        $output .= "\n<ul>";
       }
+    }
+    else if ($term->depth == $last_depth) {
+      $output .= '</li>';
     }
     else if ($term->depth < $last_depth) {
       for ($i = 0; $i < ($last_depth - $term->depth); $i++) {
-        $output .= '</ul>';
+        $output .= "</li>\n</ul>\n</li>";
       }
     }
     // Display the $term.
-    $output .= '<li>';
+    $output .= "\n<li>";
     $term->count = taxonomy_term_count_nodes($term->tid);
     if ($term->count) {
-      if ($cat_depth < 0) {
-        $output .= l($term->name, taxonomy_term_path($term), array('attributes' => array('title' => $term->description)));
-      }
-      else {
-        $output .= l($term->name, "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
-      }
+      $output .= l($term->name, ($cat_depth < 0) ? taxonomy_term_path($term) : "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
     }
     else {
       $output .= check_plain($term->name);
@@ -403,9 +401,6 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
       $output .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', url("crss/term/$term->tid"), 'comment') : '');
     }
 
-
-
-    $output .= "</li>\n";
     // Reset $last_depth in preparation for the next $term.
     $last_depth = $term->depth;
   }
@@ -413,7 +408,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   // Bring the depth back to where it began, -1.
   if ($last_depth > -1) {
     for ($i = 0; $i < ($last_depth + 1); $i++) {
-      $output .= '</ul>';
+      $output .= "</li>\n</ul>\n";
     }
   }
   $output .= "</div>\n";

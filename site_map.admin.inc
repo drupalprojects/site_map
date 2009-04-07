@@ -54,6 +54,12 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_show_front', 1),
     '#description' => t('When enabled, this option will include the front page in the site map.'),
   );
+  $form['site_map_content']['site_map_rss_front'] = array(
+    '#type' => 'textfield',
+    '#title' => t('RSS feed for front page'),
+    '#default_value' => variable_get('site_map_rss_front', 'rss.xml'),
+    '#description' => t('The RSS feed for the front page, default is rss.xml.'),
+  );
   $form['site_map_content']['site_map_show_blogs'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show active blog authors'),
