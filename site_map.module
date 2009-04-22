@@ -345,6 +345,7 @@ function _site_map_taxonomys() {
  * @return A string representing a rendered tree.
  */
 function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
+  $output = '';
   if ($vid == variable_get('forum_nav_vocabulary', '')) {
     $title = l($name, 'forum');
   }
@@ -363,7 +364,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $cat_depth = 'all';
   }
 
-  $output = $description ? '<div class="description">'. check_plain($description) ."</div>\n" : '';
+  $output .= !empty($description) ? '<div class="taxonomy-term-description">'. filter_xss_admin($description) ."</div>\n" : '';
 
   $output .= '<div class="tree">';
   // taxonomy_get_tree() honors access controls
