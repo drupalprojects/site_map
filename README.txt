@@ -8,9 +8,9 @@ License - GPL (see LICENSE)
 
 Overview:
 --------
-This module provides a site map that gives visitors an overview of 
-your site. It can also display the RSS feeds for all blogs and 
-categories. Drupal generates the RSS feeds automatically but few seems 
+This module provides a site map that gives visitors an overview of
+your site. It can also display the RSS feeds for all blogs and
+categories. Drupal generates the RSS feeds automatically but few seems
 to be aware that they exist.
 
 The site map can display the following items:
@@ -31,10 +31,12 @@ Installation:
 ------------
 1. Place this module directory in your modules folder (this will
    usually be "sites/all/modules/").
-2. Go to "administer" -> "modules" and enable the module.
-3. Check the "administer" -> "access control" page to enable use of
-   this module to different roles.
-4. Make sure the menu item is enabled in "administer" -> "menus".
+2. Go to "Administer" -> "Site building" -> "Modules" and enable the module.
+3. Check the "Administer" -> "User management" -> "Permissions" page to
+   enable use of this module to different roles.
+4. Make sure the menu item is enabled in
+   "Administer" -> "Site building" -> "Menus" -> "Navigation".
+   You may move it to another menu if you like.
 5. Visit http://example.com/sitemap.
 
 
