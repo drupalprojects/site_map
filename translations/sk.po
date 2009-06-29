@@ -191,11 +191,11 @@ msgid "View the site map to see more RSS feeds."
 msgstr "Zobrazte mapu webu ak chete vidieť viacero RSS kanálov správ."
 
 #: site_map.module:247,110
-msgid "This is a link to a content RSS feed"
+msgid "Link to a content RSS feed"
 msgstr "Toto je odkaz na RSS kanál obsahu"
 
 #: site_map.module:249,112
-msgid "This is a link to a comment RSS feed"
+msgid "Link to a comment RSS feed"
 msgstr "Toto je odkaz na RSS kanál komentárov"
 
 #: site_map.module:299,180

@@ -17,6 +17,9 @@ function site_map_uninstall() {
   variable_del('site_map_categories_depth');
   variable_del('site_map_show_rss_links');
   variable_del('site_map_rss_depth');
+  variable_del('site_map_css');
+  variable_del('site_map_term_threshold');
+  variable_del('site_map_forum_threshold');
 
   if (function_exists('locale')) {
     $langs = locale_language_list();

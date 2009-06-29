@@ -137,11 +137,11 @@ msgid "View the site map to see more RSS feeds."
 msgstr "Посмотреть карту сайта чтобы увидеть больше RSS лент."
 
 #: site_map.module:222
-msgid "This is a link to a content RSS feed"
+msgid "Link to a content RSS feed"
 msgstr "Это ссылка на RSS ленту материалов"
 
 #: site_map.module:224
-msgid "This is a link to a comment RSS feed"
+msgid "Link to a comment RSS feed"
 msgstr "Это ссылка на RSS ленту комментариев"
 
 #: site_map.module:256
