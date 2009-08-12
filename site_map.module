@@ -82,7 +82,7 @@ function site_map_block($op = 'list', $delta = 0) {
         $feedurl = is_numeric($uid) ? "blog/$uid/feed" : 'blog/feed';
       }
       else {
-        $feedurl = 'rss.xml';
+        $feedurl = variable_get('site_map_rss_front', 'rss.xml');
       }
       $block['content'] = theme('feed_icon', url($feedurl), t('Syndicate'));
       $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) ."</div>\n";
@@ -395,6 +395,9 @@ function _site_map_taxonomys() {
   if (module_exists('taxonomy') && $vids = variable_get('site_map_show_vocabularies', array())) {
     $result = db_query('SELECT vid, name, description FROM {vocabulary} WHERE vid IN ('. db_placeholders($vids, 'int') .') ORDER BY weight ASC, name', $vids);
     while ($t = db_fetch_object($result)) {
+      if (module_exists('i18ntaxonomy')) {
+        $t->name = tt("taxonomy:vocabulary:$t->vid:name", $t->name);
+      }
       $output .= _site_map_taxonomy_tree($t->vid, $t->name, $t->description);
     }
   }
@@ -444,6 +447,10 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $term->count = taxonomy_term_count_nodes($term->tid);
     if ($term->count <= $threshold) {
       continue;
+    }
+
+    if (module_exists('i18ntaxonomy')) {
+      $term->name = tt("taxonomy:term:$term->tid:name", $term->name);
     }
 
     // Adjust the depth of the <ul> based on the change
