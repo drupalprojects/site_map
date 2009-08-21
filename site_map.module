@@ -206,9 +206,9 @@ function _site_map_front_page() {
   $output = l(t("Front page of %sn", array("%sn" => variable_get('site_name', 'Drupal'))), '<front>', array('html' => TRUE));
 
   if (variable_get('site_map_show_rss_links', 1) != 0) {
-    $rss_link = theme('site_map_feed_icon', url(variable_get('site_map_rss_front', 'rss.xml')));
+    $rss_link = theme('site_map_feed_icon', variable_get('site_map_rss_front', 'rss.xml'));
     if (module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
-      $rss_link .= ' '. theme('site_map_feed_icon', url('crss'), 'comment');
+      $rss_link .= ' '. theme('site_map_feed_icon', 'crss', 'comment');
     }
     if (variable_get('site_map_show_rss_links', 1) == 1) {
       $output .= ' '. $rss_link;
@@ -234,7 +234,7 @@ function _site_map_blogs() {
 
     $blog_link = l(t('All blogs'), 'blog');
     if (variable_get('site_map_show_rss_links', 1) != 0) {
-      $rss_link = theme('site_map_feed_icon', url('blog/feed'));
+      $rss_link = theme('site_map_feed_icon', 'blog/feed');
       if (variable_get('site_map_show_rss_links', 1) == 1) {
         $blog_link .= ' '. $rss_link;
       }
@@ -256,7 +256,7 @@ function _site_map_blogs() {
     while ($blog = db_fetch_object($result)) {
       $blog_item = l(t("!s's blog", array("!s" => $blog->name)), "blog/$blog->uid") .' ('. $blog->numitems .')';
       if (variable_get('site_map_show_rss_links', 1) != 0) {
-        $rss_link = theme('site_map_feed_icon', url("blog/$blog->uid/feed"));
+        $rss_link = theme('site_map_feed_icon', "blog/$blog->uid/feed");
         if (variable_get('site_map_show_rss_links', 1) == 1) {
           $blog_item .= ' '. $rss_link;
         }
@@ -280,7 +280,7 @@ function _site_map_audio() {
     $title = t('Audio');
     $output = l(t('Audio content'), 'audio');
     if (variable_get('site_map_show_rss_links', 1) != 0) {
-      $rss_link = theme('site_map_feed_icon', url('audio/feed'));
+      $rss_link = theme('site_map_feed_icon', 'audio/feed');
       if (variable_get('site_map_show_rss_links', 1) == 1) {
         $output .= ' '. $rss_link;
       }
@@ -302,7 +302,7 @@ function _site_map_video() {
     $title = t('Video');
     $output = l(t('Video content'), 'video');
     if (variable_get('site_map_show_rss_links', 1) != 0) {
-      $rss_link = theme('site_map_feed_icon', url('video/feed'));
+      $rss_link = theme('site_map_feed_icon', 'video/feed');
       if (variable_get('site_map_show_rss_links', 1) == 1) {
         $output .= ' '. $rss_link;
       }
@@ -426,7 +426,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $threshold = variable_get('site_map_term_threshold', 0);
     $forum_link = FALSE;
   }
-  $title .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', url("crss/vocab/$vid"), 'comment') : '');
+  $title .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', "crss/vocab/$vid", 'comment') : '');
 
   $last_depth = -1;
   $rss_depth = variable_get('site_map_rss_depth', 'all');
@@ -485,9 +485,9 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     }
 
     if (variable_get('site_map_show_rss_links', 1) != 0) {
-      $rss_link = theme('site_map_feed_icon', url("taxonomy/term/$term->tid/$rss_depth/feed"));
+      $rss_link = theme('site_map_feed_icon', "taxonomy/term/$term->tid/$rss_depth/feed");
       if (module_exists('commentrss') && variable_get('commentrss_term', FALSE)) {
-        $rss_link .= ' '. theme('site_map_feed_icon', url("crss/term/$term->tid"), 'comment');
+        $rss_link .= ' '. theme('site_map_feed_icon', "crss/term/$term->tid", 'comment');
       }
       if (variable_get('site_map_show_rss_links', 1) == 1) {
         $term_item .= ' '. $rss_link;
