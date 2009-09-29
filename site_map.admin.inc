@@ -45,7 +45,7 @@ function site_map_admin_settings() {
     }
   }
   $form['site_map_content']['site_map_show_books'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#title' => t('Books to include in the site map'),
     '#default_value' => variable_get('site_map_show_books', array()),
     '#options' => $book_options,
@@ -63,7 +63,7 @@ function site_map_admin_settings() {
   $menu_options = menu_get_menus();
 
   $form['site_map_content']['site_map_show_menus'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#title' => t('Menus to include in the site map'),
     '#default_value' => variable_get('site_map_show_menus', array()),
     '#options' => $menu_options,
@@ -83,18 +83,12 @@ function site_map_admin_settings() {
     }
   }
   $form['site_map_content']['site_map_show_vocabularies'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#title' => t('Categories to include in the site map'),
     '#default_value' => variable_get('site_map_show_vocabularies', array()),
     '#options' => $vocab_options,
     '#multiple' => TRUE,
     '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
-  );
-  $form['site_map_content']['site_map_css'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Do not include site map CSS file'),
-    '#default_value' => variable_get('site_map_css', 0),
-    '#description' => t('If you don\'t want to load the included CSS file you can check this box.'),
   );
 
   $form['site_map_taxonomy_options'] = array(
@@ -155,6 +149,24 @@ function site_map_admin_settings() {
     '#maxlength' => 10,
     '#description' => t('Specify how many subcategories should be included in the RSS feed. Enter "all" to include all subcategories or "0" to include no subcategories.'),
   );
+
+  $form['site_map_css_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CSS settings'),
+  );
+  $form['site_map_css_options']['site_map_css'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Do not include site map CSS file'),
+    '#default_value' => variable_get('site_map_css', 0),
+    '#description' => t('If you don\'t want to load the included CSS file you can check this box.'),
+  );
+
+  // Make use of the Checkall module if it's installed.
+  if (module_exists('checkall')) {
+    $form['site_map_content']['site_map_show_books']['#checkall'] = TRUE;
+    $form['site_map_content']['site_map_show_menus']['#checkall'] = TRUE;
+    $form['site_map_content']['site_map_show_vocabularies']['#checkall'] = TRUE;
+  }
 
   return system_settings_form($form);
 }

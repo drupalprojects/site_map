@@ -1,6 +1,5 @@
 Drupal site map module:
 ----------------------
-Original author - Nic Ivy http://njivy.org
 Author - Fredrik Jonsson fredrik at combonet dot se
 Requires - Drupal 6
 License - GPL (see LICENSE)
@@ -40,6 +39,9 @@ Installation:
    Administer -> Site configuration -> Site map
 6. Visit http://example.com/sitemap.
 
+If you have many books/menus/vocabularies the Checkall module is recommended.
+It will implement "Check all / Uncheck all" for checkboxes on the
+site map settings page. http://drupal.org/project/checkall
 
 Site map term path (and Pathauto):
 -------------------------------
