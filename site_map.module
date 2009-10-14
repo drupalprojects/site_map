@@ -324,16 +324,13 @@ function _site_map_blogs() {
 
     $blogs = array();
     $blogs[] .= l(t('All blogs'), 'blog') . (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url('blog/feed')) : '');
-
     $sql = "SELECT DISTINCT u.uid, u.name, count(u.uid) AS numitems
       FROM {node} n
       INNER JOIN {users} u ON u.uid = n.uid
-      WHERE n.type = 'blog' and n.status = 1
+      WHERE n.type = 'blog' AND n.status = 1
       GROUP BY u.uid
       ORDER BY numitems DESC, u.name";
     $result = db_query_range($sql, 0, 10);
-
-
     while ($blog = db_fetch_object($result)) {
       $blogs[] = l(t("!s's blog", array("!s" => $blog->name)), "blog/$blog->uid") .' ('. $blog->numitems .')'. (variable_get('site_map_show_rss_links', 1) ? ' '. theme('site_map_feed_icon', url("blog/$blog->uid/feed")) : '');
     }
@@ -541,10 +538,10 @@ function _sitemap_get_message($lang_code = NULL) {
       global $locale;
       $lang_code = $locale;
     }
-    $message = variable_get("site_map_message_$lang_code", '');
+    $message = filter_xss_admin(variable_get("site_map_message_$lang_code", ''));
   }
   else {
-    $message = variable_get('site_map_message', '');
+    $message = filter_xss_admin(variable_get('site_map_message', ''));
   }
 
   return $message;
