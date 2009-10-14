@@ -526,10 +526,10 @@ function _sitemap_get_message($lang_code = NULL) {
       global $language;
       $lang_code = $language->language;
     }
-    $message = variable_get("site_map_message_$lang_code", '');
+    $message = filter_xss_admin(variable_get("site_map_message_$lang_code", ''));
   }
   else {
-    $message = variable_get('site_map_message', '');
+    $message = filter_xss_admin(variable_get('site_map_message', ''));
   }
 
   return $message;
