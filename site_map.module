@@ -107,7 +107,7 @@ function site_map_page() {
 function theme_site_map_display() {
   $output = '';
 
-  $message = variable_get('site_map_message', '');
+  $message = filter_xss_admin(variable_get('site_map_message', ''));
   $output .= $message ? '<p>'. $message .'</p>' : '';
 
   if ((variable_get('site_map_show_rss_links', 1) != 0) && module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
