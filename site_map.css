@@ -12,7 +12,7 @@
   padding-left: 1.5em;
 }
 
-#site-map .tree ul {
+#site-map .sitemap-terms ul {
   padding-left: 1.5em;
 }
 
@@ -27,6 +27,6 @@
   margin: 0;
   padding: 0;
 }
-#site-map .sitemap-rss-left .tree ul li li {
+#site-map .sitemap-rss-left .sitemap-terms ul li li {
   padding-left: 1.5em;
 }

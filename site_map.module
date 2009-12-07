@@ -431,7 +431,6 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
 
   $output .= !empty($description) ? '<div class="taxonomy-term-description">'. filter_xss_admin($description) ."</div>\n" : '';
 
-  $output .= '<div class="tree">';
   // taxonomy_get_tree() honors access controls
   $tree = taxonomy_get_tree($vid);
   foreach ($tree as $term) {
@@ -501,7 +500,6 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
       $output .= "</li>\n</ul>\n";
     }
   }
-  $output .= "</div>\n";
   $output = theme('site_map_box', $title, $output, 'sitemap-terms sitemap-terms-'. $vid . $class);
 
   return $output;
