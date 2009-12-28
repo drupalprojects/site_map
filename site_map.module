@@ -197,6 +197,38 @@ function theme_site_map_feed_icon($url, $type = 'node') {
   return $output;
 }
 
+/**
+ * This is a clone of the core theme_menu_tree() function with the exception of
+ * the site_map specific class name used in the UL that also allow themers to
+ * override the function only for the sitemap page.
+ *
+ * Generate the HTML output for a menu tree
+ *
+ * @ingroup themeable
+ */
+function theme_site_map_menu_tree($tree) {
+  return '<ul class="site-map-menu">'. $tree .'</ul>';
+}
+
+/**
+ * This is a one by one clone of the core theme_menu_item() function that allows
+ * custom theming of the sitemap page items.
+ *
+ * Generate the HTML output for a menu item and submenu.
+ *
+ * @ingroup themeable
+ */
+function theme_site_map_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
+  $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
+  if (!empty($extra_class)) {
+    $class .= ' '. $extra_class;
+  }
+  if ($in_active_trail) {
+    $class .= ' active-trail';
+  }
+  return '<li class="'. $class .'">'. $link . $menu ."</li>\n";
+}
+
 function _site_map_front_page() {
   $output = '';
   $class = '';
@@ -546,36 +578,4 @@ function _site_map_menu_tree_output($tree) {
     }
   }
   return $output ? theme('site_map_menu_tree', $output) : '';
-}
-
-/**
- * This is a clone of the core theme_menu_tree() function with the exception of
- * the site_map specific class name used in the UL that also allow themers to
- * override the function only for the sitemap page.
- *
- * Generate the HTML output for a menu tree
- *
- * @ingroup themeable
- */
-function theme_site_map_menu_tree($tree) {
-  return '<ul class="site-map-menu">'. $tree .'</ul>';
-}
-
-/**
- * This is a one by one clone of the core theme_menu_item() function that allows
- * custom theming of the sitemap page items.
- *
- * Generate the HTML output for a menu item and submenu.
- *
- * @ingroup themeable
- */
-function theme_site_map_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
-  $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
-  if (!empty($extra_class)) {
-    $class .= ' '. $extra_class;
-  }
-  if ($in_active_trail) {
-    $class .= ' active-trail';
-  }
-  return '<li class="'. $class .'">'. $link . $menu ."</li>\n";
 }
