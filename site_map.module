@@ -111,7 +111,8 @@ function theme_site_map_display() {
   $output .= $message ? '<p>'. $message .'</p>' : '';
 
   if ((variable_get('site_map_show_rss_links', 1) != 0) && module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
-    $output .= '<p><span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('Link to a content RSS feed');
+    $output .= '<p><strong>'. t('Legend:') .'</strong><br />';
+    $output .= '<span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('Link to a content RSS feed');
     $output .= '<br /><span class="rss">'. theme('site_map_feed_icon', NULL, 'comment') .'</span> '. t('Link to a comment RSS feed');
     $output .= '</p>';
   }
@@ -359,7 +360,7 @@ function _site_map_books() {
     $book_menus = array();
     foreach ($nids as $nid) {
       $node = node_load($nid);
-      $tree = menu_tree_all_data($node->book['menu_name'], $node->book);
+      $tree = menu_tree_all_data($node->book['menu_name']);
       $data = array_shift($tree);
       $output .= theme('book_title_link', $data['link']);
       $output .= ($data['below']) ? _site_map_menu_tree_output($data['below']) : '';
