@@ -50,7 +50,6 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_show_books', array()),
     '#options' => $book_options,
     '#multiple' => TRUE,
-    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
 //   $form['site_map_content']['site_map_books_expanded'] = array(
 //     '#type' => 'checkbox',
@@ -68,7 +67,6 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_show_menus', array()),
     '#options' => $menu_options,
     '#multiple' => TRUE,
-    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
   $form['site_map_content']['site_map_show_faq'] = array(
     '#type' => 'checkbox',
@@ -88,7 +86,6 @@ function site_map_admin_settings() {
     '#default_value' => variable_get('site_map_show_vocabularies', array()),
     '#options' => $vocab_options,
     '#multiple' => TRUE,
-    '#description' => t('Ctrl-click (Windows) or Command-click (Mac) to select more than one value.'),
   );
 
   $form['site_map_taxonomy_options'] = array(
