@@ -23,7 +23,7 @@ function site_map_theme() {
       'arguments' => array(),
     ),
     'site_map_box' => array(
-      'arguments' => array('title' => NULL, 'content' => NULL, 'class' => ''),
+      'arguments' => array('title' => NULL, 'content' => NULL, 'class' => NULL),
     ),
     'site_map_feed_icon' => array(
       'arguments' => array('url' => NULL, 'type' => 'node'),
@@ -32,7 +32,7 @@ function site_map_theme() {
       'arguments' => array('tree' => NULL),
     ),
     'site_map_menu_item' => array(
-      'arguments' => array('link' => NULL, 'has_children' => NULL, 'menu' => ''),
+      'arguments' => array('link' => NULL, 'has_children' => NULL, 'menu' => NULL),
     ),
   );
 }
@@ -69,7 +69,7 @@ function site_map_block($op = 'list', $delta = 0) {
     $blocks[0]['info'] = t('Syndicate (site map)');
     return $blocks;
   }
-  else if ($op == 'view') {
+  elseif ($op == 'view') {
     if (user_access('access content')) {
       $block['subject'] = t('Syndicate');
       if (arg(0) == 'blog') {
@@ -496,10 +496,10 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
         $output .= "\n<ul>";
       }
     }
-    else if ($term->depth == $last_depth) {
+    elseif ($term->depth == $last_depth) {
       $output .= '</li>';
     }
-    else if ($term->depth < $last_depth) {
+    elseif ($term->depth < $last_depth) {
       for ($i = 0; $i < ($last_depth - $term->depth); $i++) {
         $output .= "</li>\n</ul>\n</li>";
       }
@@ -510,7 +510,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     if ($forum_link) {
       $term_item .= l($term->name, 'forum/'. $term->tid, array('attributes' => array('title' => $term->description)));
     }
-    else if ($term->count) {
+    elseif ($term->count) {
       $term_item .= l($term->name, ($cat_depth < 0) ? taxonomy_term_path($term) : "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
     }
     else {
