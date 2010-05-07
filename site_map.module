@@ -166,7 +166,20 @@ function theme_site_map_display() {
  *   A string containing the box output.
  */
 function theme_site_map_box($title, $content, $class = '') {
-  return  '<div class="sitemap-box '. $class .'"><h2 class="title">'. $title .'</h2><div class="content">'. $content .'</div></div>';
+  $output = '';
+  if ($title || $content) {
+    $class = $class ? 'sitemap-box '. $class : 'sitemap-box';
+    $output .= '<div class="'. $class .'">';
+    if ($title) {
+      $output .= '<h2 class="title">'. $title .'</h2>';
+    }
+    if ($content) {
+      $output .= '<div class="content">'. $content .'</div>';
+    }
+    $output .= '</div>';
+  }
+
+  return $output;
 }
 
 /**
