@@ -2,6 +2,13 @@
 // $Id$
 
 /**
+ * @file
+ * The install and update code for the site_map module.
+ *
+ * @ingroup site_map
+ */
+
+/**
  * Implementation of hook_uninstall().
  */
 function site_map_uninstall() {

@@ -71,7 +71,7 @@ function site_map_admin_settings() {
   $form['site_map_content']['site_map_show_faq'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show FAQ content'),
-    '#default_value' => variable_get('site_map_show_faq', 1),
+    '#default_value' => variable_get('site_map_show_faq', 0),
     '#description' => t('When enabled, this option will include the content from the FAQ module in the site map.'),
   );
   $vocab_options = array();
