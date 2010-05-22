@@ -21,6 +21,7 @@ function site_map_admin_settings() {
     '#rows' => 5,
     '#description' => t('Define a message to be displayed above the site map.'),
   );
+  $form['site_map_message_format'] = filter_form(variable_get('site_map_message_format', FILTER_FORMAT_DEFAULT));
 
   $form['site_map_content'] = array(
     '#type' => 'fieldset',

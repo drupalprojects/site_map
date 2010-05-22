@@ -2,7 +2,8 @@
 // $Id$
 
 /**
- * @file
+ * @file site_map.module
+ *
  * Original author: Nic Ivy
  * Now maintained by by Fredrik Jonsson fredrik at combonet dot se
  */
@@ -19,20 +20,30 @@ function site_map_perm() {
  */
 function site_map_theme() {
   return array(
-    'site_map_display' => array(
+    'site_map' => array(
       'arguments' => array(),
+      'template' => 'site-map',
+      'file' => 'site_map.theme.inc',
     ),
     'site_map_box' => array(
       'arguments' => array('title' => NULL, 'content' => NULL, 'class' => NULL),
+      'file' => 'site_map.theme.inc',
     ),
     'site_map_feed_icon' => array(
       'arguments' => array('url' => NULL, 'type' => 'node'),
+      'file' => 'site_map.theme.inc',
     ),
     'site_map_menu_tree' => array(
       'arguments' => array('tree' => NULL),
+      'file' => 'site_map.theme.inc',
     ),
     'site_map_menu_item' => array(
       'arguments' => array('link' => NULL, 'has_children' => NULL, 'menu' => NULL),
+      'file' => 'site_map.theme.inc',
+    ),
+    'site_map_rss_legend' => array(
+      'arguments' => array(),
+      'file' => 'site_map.theme.inc',
     ),
   );
 }
@@ -95,152 +106,7 @@ function site_map_page() {
     drupal_add_css(drupal_get_path('module', 'site_map') .'/site_map.css');
   }
 
-  return theme('site_map_display');
-}
-
-/**
- * Return a themed site map.
- *
- * @return
- *   A string containing the site map output.
- */
-function theme_site_map_display() {
-  $output = '';
-
-  $message = filter_xss_admin(variable_get('site_map_message', ''));
-  $output .= $message ? '<p>'. $message .'</p>' : '';
-
-  if ((variable_get('site_map_show_rss_links', 1) != 0) && module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
-    $output .= '<p><strong>'. t('Legend:') .'</strong><br />';
-    $output .= '<span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('Link to a content RSS feed');
-    $output .= '<br /><span class="rss">'. theme('site_map_feed_icon', NULL, 'comment') .'</span> '. t('Link to a comment RSS feed');
-    $output .= '</p>';
-  }
-
-  if (variable_get('site_map_show_front', 1)) {
-    $output .= _site_map_front_page();
-  }
-
-  if (variable_get('site_map_show_blogs', 1)) {
-    $output .= _site_map_blogs();
-  }
-
-/*   $output .= _site_map_audio(); */
-
-/*   $output .= _site_map_video(); */
-
-  // Compile the books trees.
-  $output .= _site_map_books();
-
-  // Compile the menu trees.
-  $output .= _site_map_menus();
-
-  if (variable_get('site_map_show_faq', 1)) {
-    $output .= _site_map_faq();
-  }
-
-  // Compile the vocabulary trees.
-  $output .= _site_map_taxonomys();
-
-  // Invoke all custom modules and get themed HTML to be integrated into the site map.
-  $additional = module_invoke_all('site_map');
-  foreach ($additional as $themed_site_map_code) {
-    $output .= $themed_site_map_code;
-  }
-
-  $output = '<div id="site-map" class="site-map">'. $output .'</div>';
-
-  return $output;
-}
-
-/**
- * Return a themed sitemap box.
- *
- * @param $title
- *   The subject of the box.
- * @param $content
- *   The content of the box.
- * @param $class
- *   Optional extra class for the box.
- * @return
- *   A string containing the box output.
- */
-function theme_site_map_box($title, $content, $class = '') {
-  $output = '';
-  if ($title || $content) {
-    $class = $class ? 'sitemap-box '. $class : 'sitemap-box';
-    $output .= '<div class="'. $class .'">';
-    if ($title) {
-      $output .= '<h2 class="title">'. $title .'</h2>';
-    }
-    if ($content) {
-      $output .= '<div class="content">'. $content .'</div>';
-    }
-    $output .= '</div>';
-  }
-
-  return $output;
-}
-
-/**
- * Return a themed feed icon.
- *
- * @param $url
- *   The feed URL.
- * @param $type
- *   The type of feed icon.
- * @return
- *   A string containing the linked image.
- */
-function theme_site_map_feed_icon($url, $type = 'node') {
-  $output = '';
-
-  switch ($type) {
-    case 'node':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small.png'), t('Syndicate content'), t('Syndicate content'));
-      break;
-    case 'comment':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small-comment.png'), t('Syndicate comments'), t('Syndicate comments'));
-      break;
-  }
-
-  if ($url) {
-    $output = l($output, $url, array('attributes' => array('class' => 'feed-link'), 'html' => TRUE));
-  }
-
-  return $output;
-}
-
-/**
- * This is a clone of the core theme_menu_tree() function with the exception of
- * the site_map specific class name used in the UL that also allow themers to
- * override the function only for the sitemap page.
- *
- * Generate the HTML output for a menu tree
- *
- * @ingroup themeable
- */
-function theme_site_map_menu_tree($tree) {
-  return '<ul class="site-map-menu">'. $tree .'</ul>';
-}
-
-/**
- * This is a one by one clone of the core theme_menu_item() function that allows
- * custom theming of the sitemap page items.
- *
- * Generate the HTML output for a menu item and submenu.
- *
- * @ingroup themeable
- */
-function theme_site_map_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
-  $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
-  if (!empty($extra_class)) {
-    $class .= ' '. $extra_class;
-  }
-  if ($in_active_trail) {
-    $class .= ' active-trail';
-  }
-  return '<li class="'. $class .'">'. $link . $menu ."</li>\n";
+  return theme('site_map');
 }
 
 function _site_map_front_page() {
@@ -258,12 +124,12 @@ function _site_map_front_page() {
       $output .= ' '. $rss_link;
     }
     else {
-      $class = ' sitemap-rss-left';
+      $class = ' site-map-rss-left';
       $output = $rss_link .' '. $output;
     }
   }
 
-  return theme('site_map_box', $title, $output, 'sitemap-front'. $class);
+  return theme('site_map_box', $title, $output, 'site-map-front-box'. $class);
 }
 
 /**
@@ -283,7 +149,7 @@ function _site_map_blogs() {
         $blog_link .= ' '. $rss_link;
       }
       else {
-        $class = ' sitemap-rss-left';
+        $class = ' site-map-rss-left';
         $blog_link = $rss_link .' '. $blog_link;
       }
     }
@@ -311,7 +177,7 @@ function _site_map_blogs() {
       $blogs[] = $blog_item;
     }
     $output .= theme('item_list', $blogs);
-    $output = theme('site_map_box', $title, $output, 'sitemap-blog'. $class);
+    $output = theme('site_map_box', $title, $output, 'site-map-blog-box'. $class);
   }
 
   return $output;
@@ -329,11 +195,11 @@ function _site_map_audio() {
         $output .= ' '. $rss_link;
       }
       else {
-        $class = ' sitemap-rss-left';
+        $class = ' site-map-rss-left';
         $output = $rss_link .' '. $output;
       }
     }
-    $output = theme('site_map_box', $title, $output, 'sitemap-audio'. $class);
+    $output = theme('site_map_box', $title, $output, 'site-map-audio-box'. $class);
   }
 
   return $output;
@@ -351,11 +217,11 @@ function _site_map_video() {
         $output .= ' '. $rss_link;
       }
       else {
-        $class = ' sitemap-rss-left';
+        $class = ' site-map-rss-left';
         $output = $rss_link .' '. $output;
       }
     }
-    $output = theme('site_map_box', $title, $output, 'sitemap-video'. $class);
+    $output = theme('site_map_box', $title, $output, 'site-map-video-box'. $class);
   }
 
   return $output;
@@ -380,7 +246,7 @@ function _site_map_books() {
     }
 
     if ($output) {
-      $output = theme('site_map_box', $title, $description . $output, 'sitemap-book');
+      $output = theme('site_map_box', $title, $description . $output, 'site-map-book-box');
     }
   }
 
@@ -405,7 +271,7 @@ function _site_map_menus() {
       $menu_display = _site_map_menu_tree_output($tree);
       if (!empty($menu_display)) {
         $title = $menu['title'];
-        $output .= theme('site_map_box', $title, $menu_display, 'sitemap-menu');
+        $output .= theme('site_map_box', $title, $menu_display, 'site-map-menu-box');
       }
     }
   }
@@ -418,7 +284,7 @@ function _site_map_faq() {
   if (module_exists('faq')) {
     $title = variable_get('faq_title', t('Frequently Asked Questions'));
     $output = faq_get_faq_list();
-    $output = theme('site_map_box', $title, $output, 'sitemap-faq');
+    $output = theme('site_map_box', $title, $output, 'site-map-faq-box');
   }
 
   return $output;
@@ -529,7 +395,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
         $term_item .= ' '. $rss_link;
       }
       else {
-        $class = ' sitemap-rss-left';
+        $class = ' site-map-rss-left';
         $term_item = $rss_link .' '. $term_item;
       }
     }
@@ -546,7 +412,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
       $output .= "</li>\n</ul>\n";
     }
   }
-  $output = theme('site_map_box', $title, $output, 'sitemap-terms sitemap-terms-'. $vid . $class);
+  $output = theme('site_map_box', $title, $output, 'site-map-terms-box site-map-terms-box-'. $vid . $class);
 
   return $output;
 }

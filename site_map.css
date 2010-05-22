@@ -1,32 +1,28 @@
 /* $Id$  */
 
-.sitemap-box {
-  margin-bottom: 1em;
-}
-
 #site-map .description {
   margin-bottom: 0.5em;
 }
 
-#site-map ul.menu {
-  padding-left: 1.5em;
+#site-map .site-map-box {
+  margin-bottom: 1em;
 }
 
-#site-map .sitemap-terms ul {
+#site-map .site-map-box ul {
   padding-left: 1.5em;
 }
 
 /* Styles when RSS icons are displayed on the left. */
-#site-map .sitemap-rss-left ul {
+#site-map .site-map-rss-left ul {
   padding-left: 0;
 }
-#site-map .sitemap-rss-left li {
+#site-map .site-map-rss-left li {
   list-style-type: none;
   list-style-image: none;
   background-image: none;
   margin: 0;
   padding: 0;
 }
-#site-map .sitemap-rss-left ul li li {
+#site-map .site-map-rss-left ul li li {
   padding-left: 1.5em;
 }
