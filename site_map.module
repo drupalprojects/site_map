@@ -5,7 +5,7 @@
  * @file site_map.module
  *
  * Original author: Nic Ivy
- * Now maintained by by Fredrik Jonsson fredrik at combonet dot se
+ * Now maintained by Fredrik Jonsson fredrik at combonet dot se
  */
 
 /**
@@ -102,6 +102,8 @@ function site_map_block($op = 'list', $delta = 0) {
  * Menu callback for the site map.
  */
 function site_map_page() {
+  drupal_set_title(check_plain(variable_get('site_map_page_title', t('Site map'))));
+
   if (variable_get('site_map_css', 0) != 1) {
     drupal_add_css(drupal_get_path('module', 'site_map') .'/site_map.css');
   }
