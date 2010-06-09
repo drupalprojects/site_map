@@ -135,7 +135,7 @@ function template_preprocess_site_map(&$variables) {
   // Compile the menu trees.
   $variables['menus'] = _site_map_menus();
 
-  if (variable_get('site_map_show_faq', 1)) {
+  if (variable_get('site_map_show_faq', 0)) {
     $variables['faq'] = _site_map_faq();
   }
 
