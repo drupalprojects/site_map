@@ -128,9 +128,7 @@ function template_preprocess_site_map(&$variables) {
   }
 
   // Compile the books trees.
-  if (module_exists('book')) {
-    $variables['books'] = _site_map_books();
-  }
+  $variables['books'] = _site_map_books();
 
   // Compile the menu trees.
   $variables['menus'] = _site_map_menus();
