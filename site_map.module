@@ -383,7 +383,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
       $term_item .= l($term->name, 'forum/'. $term->tid, array('attributes' => array('title' => $term->description)));
     }
     elseif ($term->count) {
-      $term_item .= l($term->name, ($cat_depth < 0) ? taxonomy_term_path($term) : "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
+      $term_item .= l($term->name, ($cat_depth <= 0) ? taxonomy_term_path($term) : "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
     }
     else {
       $term_item .= check_plain($term->name);
