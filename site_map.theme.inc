@@ -113,7 +113,7 @@ function theme_site_map_menu_item($link, $has_children, $menu = '', $in_active_t
  * @see site-map.tpl.php
  */
 function template_preprocess_site_map(&$variables) {
-  $variables['message'] = check_markup(variable_get('site_map_message', ''), variable_get('site_map_message_format', FILTER_FORMAT_DEFAULT));
+  $variables['message'] = check_markup(variable_get('site_map_message', ''), variable_get('site_map_message_format', FILTER_FORMAT_DEFAULT), FALSE);
 
   if ((variable_get('site_map_show_rss_links', 1) != 0) && module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
     $variables['rss_legend'] = theme('site_map_rss_legend');
