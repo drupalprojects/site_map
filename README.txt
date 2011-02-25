@@ -13,4 +13,3 @@ Nic Ivy (http://njivy.org)
 
 README.txt version
 ------------------
-$Id$
