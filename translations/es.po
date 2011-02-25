@@ -1,4 +1,3 @@
-# $Id$
 #
 # SPANISH translation of Drupal (general)
 # Copyright 2009 David Moreno Fernández <david.moreno@gmail.com>
