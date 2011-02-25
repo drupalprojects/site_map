@@ -54,4 +54,3 @@ alias for you should set this to "-1" I belive.
 
 Last updated:
 ------------
-$Id$
