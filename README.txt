@@ -39,4 +39,3 @@ Installation:
 
 Last updated:
 ------------
-$Id$
