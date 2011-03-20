@@ -77,6 +77,9 @@ function site_map_menu() {
 function site_map_block($op = 'list', $delta = 0) {
   if ($op == 'list') {
     $blocks[0]['info'] = t('Syndicate (site map)');
+    // Do no caching because $feedurl is different for blogs.
+    $blocks[0]['cache'] = BLOCK_NO_CACHE;
+
     return $blocks;
   }
   elseif ($op == 'view') {

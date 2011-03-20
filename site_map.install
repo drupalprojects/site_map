@@ -23,3 +23,12 @@ function site_map_update_6000() {
   $ret[] = update_sql("DELETE FROM {variable} WHERE name LIKE 'site_map_show_menus_%'");
   return $ret;
 }
+
+/**
+ * Change block caching mode.
+ */
+function site_map_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {blocks} set cache = ". BLOCK_NO_CACHE ." WHERE module = 'site_map'");
+  return $ret;
+}
