@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file site-map.tpl.php
+ * @file
+ * site-map.tpl.php
  *
  * Theme implementation to display the site map.
  *

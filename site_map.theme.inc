@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @file site_map.theme.inc
- *
+ * @file
  * Site map theme functions.
  */
 
-
+/**
+ * Theme function for rss legend.
+ */
 function theme_site_map_rss_legend() {
-  $output .= '<p><strong>'. t('Legend:') .'</strong><br />';
-  $output .= '<span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('Link to a content RSS feed');
-  $output .= '<br /><span class="rss">'. theme('site_map_feed_icon', NULL, 'comment') .'</span> '. t('Link to a comment RSS feed');
+  $output .= '<p><strong>' . t('Legend:') . '</strong><br />';
+  $output .= '<span class="rss">' . theme('site_map_feed_icon', NULL) . '</span> ' . t('Link to a content RSS feed');
+  $output .= '<br /><span class="rss">' . theme('site_map_feed_icon', NULL, 'comment') . '</span> ' . t('Link to a comment RSS feed');
   $output .= '</p>';
 
   return $output;
@@ -19,25 +20,26 @@ function theme_site_map_rss_legend() {
 /**
  * Return a themed site map box.
  *
- * @param $title
+ * @param string $title
  *   The subject of the box.
- * @param $content
+ * @param string $content
  *   The content of the box.
- * @param $class
+ * @param string $class
  *   Optional extra class for the box.
- * @return
+ *
+ * @return string
  *   A string containing the box output.
  */
 function theme_site_map_box($title, $content, $class = '') {
   $output = '';
   if ($title || $content) {
-    $class = $class ? 'site-map-box '. $class : 'site-map-box';
-    $output .= '<div class="'. $class .'">';
+    $class = $class ? 'site-map-box ' . $class : 'site-map-box';
+    $output .= '<div class="' . $class . '">';
     if ($title) {
-      $output .= '<h2 class="title">'. $title .'</h2>';
+      $output .= '<h2 class="title">' . $title . '</h2>';
     }
     if ($content) {
-      $output .= '<div class="content">'. $content .'</div>';
+      $output .= '<div class="content">' . $content . '</div>';
     }
     $output .= '</div>';
   }
@@ -48,11 +50,12 @@ function theme_site_map_box($title, $content, $class = '') {
 /**
  * Return a themed feed icon.
  *
- * @param $url
+ * @param string $url
  *   The feed URL.
- * @param $type
+ * @param string $type
  *   The type of feed icon.
- * @return
+ *
+ * @return string
  *   A string containing the linked image.
  */
 function theme_site_map_feed_icon($url, $type = 'node') {
@@ -60,10 +63,11 @@ function theme_site_map_feed_icon($url, $type = 'node') {
 
   switch ($type) {
     case 'node':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small.png'), t('Syndicate content'), t('Syndicate content'));
+      $output = theme('image', (drupal_get_path('module', 'site_map') . '/feed-small.png'), t('Syndicate content'), t('Syndicate content'));
       break;
+
     case 'comment':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small-comment.png'), t('Syndicate comments'), t('Syndicate comments'));
+      $output = theme('image', (drupal_get_path('module', 'site_map') . '/feed-small-comment.png'), t('Syndicate comments'), t('Syndicate comments'));
       break;
   }
 
@@ -75,35 +79,35 @@ function theme_site_map_feed_icon($url, $type = 'node') {
 }
 
 /**
+ * Generate the HTML output for a menu tree.
+ *
  * This is a clone of the core theme_menu_tree() function with the exception of
  * the site_map specific class name used in the UL that also allow themers to
  * override the function only for the site map page.
  *
- * Generate the HTML output for a menu tree
- *
  * @ingroup themeable
  */
 function theme_site_map_menu_tree($tree) {
-  return '<ul class="site-map-menu">'. $tree .'</ul>';
+  return '<ul class="site-map-menu">' . $tree . '</ul>';
 }
 
 /**
+ * Generate the HTML output for a menu item and submenu.
+ *
  * This is a one by one clone of the core theme_menu_item() function that allows
  * custom theming of the site map page items.
- *
- * Generate the HTML output for a menu item and submenu.
  *
  * @ingroup themeable
  */
 function theme_site_map_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
   $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
   if (!empty($extra_class)) {
-    $class .= ' '. $extra_class;
+    $class .= ' ' . $extra_class;
   }
   if ($in_active_trail) {
     $class .= ' active-trail';
   }
-  return '<li class="'. $class .'">'. $link . $menu ."</li>\n";
+  return '<li class="' . $class . '">' . $link . $menu . "</li>\n";
 }
 
 /**
@@ -139,7 +143,8 @@ function template_preprocess_site_map(&$variables) {
   // Compile the vocabulary trees.
   $variables['taxonomys'] = _site_map_taxonomys();
 
-  // Invoke all custom modules and get themed HTML to be integrated into the site map.
+  // Invoke all custom modules and get themed HTML to be integrated
+  // into the site map.
   $additional = module_invoke_all('site_map');
   foreach ($additional as $themed_site_map_code) {
     $variables['additional'] .= $themed_site_map_code;

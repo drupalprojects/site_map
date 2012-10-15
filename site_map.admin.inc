@@ -58,12 +58,6 @@ function site_map_admin_settings() {
     '#options' => $book_options,
     '#multiple' => TRUE,
   );
-//   $form['site_map_content']['site_map_books_expanded'] = array(
-//     '#type' => 'checkbox',
-//     '#title' => t('Show books expanded'),
-//     '#default_value' => variable_get('site_map_books_expanded', 1),
-//     '#description' => t('When enabled, this option will show all children pages for each book.'),
-//   );
 
   $menu_options = array();
   $menu_options = menu_get_menus();
@@ -118,14 +112,14 @@ function site_map_admin_settings() {
     '#title' => t('Category count threshold'),
     '#default_value' => variable_get('site_map_term_threshold', 0),
     '#size' => 3,
-    '#description' => t('Only show categories whose node counts are greater than this threshold. Set to -1 to disable')
+    '#description' => t('Only show categories whose node counts are greater than this threshold. Set to -1 to disable'),
   );
   $form['site_map_taxonomy_options']['site_map_forum_threshold'] = array(
     '#type' => 'textfield',
     '#title' => t('Forum count threshold'),
     '#default_value' => variable_get('site_map_forum_threshold', -1),
     '#size' => 3,
-    '#description' => t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable')
+    '#description' => t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable'),
   );
 
   $form['site_map_rss_options'] = array(
@@ -142,7 +136,11 @@ function site_map_admin_settings() {
     '#type' => 'select',
     '#title' => t('Include RSS links'),
     '#default_value' => variable_get('site_map_show_rss_links', 1),
-    '#options' => array(0 => t('None'), 1 => t('Include on the right side'), 2 => t('Include on the left side')),
+    '#options' => array(
+      0 => t('None'),
+      1 => t('Include on the right side'),
+      2 => t('Include on the left side'),
+    ),
     '#description' => t('When enabled, this option will show links to the RSS feeds for each category and blog.'),
   );
   $form['site_map_rss_options']['site_map_rss_depth'] = array(
@@ -162,7 +160,7 @@ function site_map_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Do not include site map CSS file'),
     '#default_value' => variable_get('site_map_css', 0),
-    '#description' => t('If you don\'t want to load the included CSS file you can check this box.'),
+    '#description' => t("If you don't want to load the included CSS file you can check this box."),
   );
 
   // Make use of the Checkall module if it's installed.
