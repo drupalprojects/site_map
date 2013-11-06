@@ -96,7 +96,7 @@ function site_map_block($op = 'list', $delta = 0) {
  */
 function site_map_page() {
   if (variable_get('site_map_css', 0) != 1) {
-    drupal_add_css(drupal_get_path('module', 'site_map') .'/site_map.css');
+    drupal_add_css(drupal_get_path('module', 'site_map') . '/site_map.css');
   }
 
   return theme('site_map_display');
@@ -105,15 +105,15 @@ function site_map_page() {
 /**
  * Return a themed site map.
  *
- * @return
+ * @return string
  *   A string containing the site map output.
  */
 function theme_site_map_display() {
   $output = '';
 
   if ((variable_get('site_map_show_rss_links', 1) != 0) && module_exists('commentrss') && variable_get('commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
-    $output .= '<p><span class="rss">'. theme('site_map_feed_icon', NULL) .'</span> '. t('Link to a content RSS feed');
-    $output .= '<br /><span class="rss">'. theme('site_map_feed_icon', NULL, 'comment') .'</span> '. t('Link to a comment RSS feed');
+    $output .= '<p><span class="rss">' . theme('site_map_feed_icon', NULL) . '</span> ' . t('Link to a content RSS feed');
+    $output .= '<br /><span class="rss">' . theme('site_map_feed_icon', NULL, 'comment') . '</span> ' . t('Link to a comment RSS feed');
     $output .= '</p>';
   }
 
@@ -125,9 +125,9 @@ function theme_site_map_display() {
     $output .= _site_map_blogs();
   }
 
-/*   $output .= _site_map_audio(); */
+  /* $output .= _site_map_audio(); */
 
-/*   $output .= _site_map_video(); */
+  /* $output .= _site_map_video(); */
 
   // Compile the books trees.
   $output .= _site_map_books();
@@ -142,13 +142,13 @@ function theme_site_map_display() {
   // Compile the vocabulary trees.
   $output .= _site_map_taxonomys();
 
-  // Invoke all custom modules and get themed HTML to be integrated into the site map.
+  // Invoke all modules and get themed HTML to be integrated into the site map.
   $additional = module_invoke_all('site_map');
   foreach ($additional as $themed_site_map_code) {
     $output .= $themed_site_map_code;
   }
 
-  $output = '<div id="site-map" class="site-map">'. $output .'</div>';
+  $output = '<div id="site-map" class="site-map">' . $output . '</div>';
 
   return $output;
 }
@@ -156,27 +156,29 @@ function theme_site_map_display() {
 /**
  * Return a themed sitemap box.
  *
- * @param $title
+ * @param string $title
  *   The subject of the box.
- * @param $content
+ * @param string $content
  *   The content of the box.
- * @param $class
+ * @param string $class
  *   Optional extra class for the box.
- * @return
+ *
+ * @return string
  *   A string containing the box output.
  */
 function theme_site_map_box($title, $content, $class = '') {
-  return  '<div class="sitemap-box '. $class .'"><h2 class="title">'. $title .'</h2><div class="content">'. $content .'</div></div>';
+  return '<div class="sitemap-box ' . $class . '"><h2 class="title">' . $title . '</h2><div class="content">' . $content . '</div></div>';
 }
 
 /**
  * Return a themed feed icon.
  *
- * @param $url
+ * @param string $url
  *   The feed URL.
- * @param $type
+ * @param string $type
  *   The type of feed icon.
- * @return
+ *
+ * @return string
  *   A string containing the linked image.
  */
 function theme_site_map_feed_icon($url, $type = 'node') {
@@ -184,10 +186,11 @@ function theme_site_map_feed_icon($url, $type = 'node') {
 
   switch ($type) {
     case 'node':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small.png'), t('Syndicate content'), t('Syndicate content'));
+      $output = theme('image', (drupal_get_path('module', 'site_map') . '/feed-small.png'), t('Syndicate content'), t('Syndicate content'));
       break;
+
     case 'comment':
-      $output = theme('image', (drupal_get_path('module', 'site_map') .'/feed-small-comment.png'), t('Syndicate comments'), t('Syndicate comments'));
+      $output = theme('image', (drupal_get_path('module', 'site_map') . '/feed-small-comment.png'), t('Syndicate comments'), t('Syndicate comments'));
       break;
   }
 
