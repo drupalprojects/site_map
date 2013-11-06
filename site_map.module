@@ -7,25 +7,25 @@
  */
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function site_map_help($path, $arg) {
   switch ($path) {
     case 'sitemap':
       $output = _sitemap_get_message();
-      return $output ? '<p>'. $output .'</p>' : '';
+      return $output ? '<p>' . $output . '</p>' : '';
   }
 }
 
 /**
- * Implementation of hook_perm().
+ * Implements hook_perm().
  */
 function site_map_perm() {
   return array('access site map');
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function site_map_theme() {
   return array(
@@ -42,7 +42,7 @@ function site_map_theme() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function site_map_menu() {
   $items['admin/settings/sitemap'] = array(
@@ -66,14 +66,14 @@ function site_map_menu() {
 }
 
 /**
- * Implementation of hook_block().
+ * Implements hook_block().
  */
 function site_map_block($op = 'list', $delta = 0) {
   if ($op == 'list') {
     $blocks[0]['info'] = t('Syndicate (site map)');
     return $blocks;
   }
-  else if ($op == 'view') {
+  elseif ($op == 'view') {
     if (user_access('access content')) {
       $block['subject'] = t('Syndicate');
       if (arg(0) == 'blog') {
@@ -84,7 +84,7 @@ function site_map_block($op = 'list', $delta = 0) {
         $feedurl = variable_get('site_map_rss_front', 'rss.xml');
       }
       $block['content'] = theme('feed_icon', url($feedurl), t('Syndicate'));
-      $block['content'] .= '<div class="more-link">'. l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) ."</div>\n";
+      $block['content'] .= '<div class="more-link">' . l(t('more'), 'sitemap', array('title' => t('View the site map to see more RSS feeds.'))) . "</div>\n";
 
       return $block;
     }
