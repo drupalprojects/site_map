@@ -1,7 +1,13 @@
 <?php
 
 /**
- * Implementation of hook_uninstall().
+ * @file
+ * Original author: Nic Ivy
+ * Now maintained by by Fredrik Jonsson fredrik at combonet dot se
+ */
+
+/**
+ * Implements hook_uninstall().
  */
 function site_map_uninstall() {
   variable_del('site_map_message');
