@@ -405,12 +405,17 @@ function _site_map_taxonomys() {
 }
 
 /**
- * Render taxonomy tree
+ * Render taxonomy tree.
  *
- * @param $tree The results of taxonomy_get_tree() with optional 'count' fields.
- * @param $name An optional name for the tree. (Default: NULL)
- * @param $description An optional description of the tree. (Default: NULL)
- * @return A string representing a rendered tree.
+ * @param int $vid
+ *   The results of taxonomy_get_tree() with optional 'count' fields.
+ * @param string $name
+ *   An optional name for the tree. (Default: NULL)
+ * @param string $description
+ *   An optional description of the tree. (Default: NULL)
+ *
+ * @return string
+ *   A string representing a rendered tree.
  */
 function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
   $output = '';
@@ -425,7 +430,7 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $threshold = variable_get('site_map_term_threshold', 0);
     $forum_link = FALSE;
   }
-  $title .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' '. theme('site_map_feed_icon', "crss/vocab/$vid", 'comment') : '');
+  $title .= (module_exists('commentrss') && variable_get('commentrss_term', FALSE) ? ' ' . theme('site_map_feed_icon', "crss/vocab/$vid", 'comment') : '');
 
   $last_depth = -1;
   $rss_depth = variable_get('site_map_rss_depth', 'all');
@@ -437,10 +442,10 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $cat_depth = 'all';
   }
 
-  $output .= !empty($description) ? '<div class="taxonomy-term-description">'. filter_xss_admin($description) ."</div>\n" : '';
+  $output .= !empty($description) ? '<div class="taxonomy-term-description">' . filter_xss_admin($description) . "</div>\n" : '';
 
   $output .= '<div class="tree">';
-  // taxonomy_get_tree() honors access controls
+  // taxonomy_get_tree() honors access controls.
   $tree = taxonomy_get_tree($vid);
   foreach ($tree as $term) {
     $term->count = taxonomy_term_count_nodes($term->tid);
@@ -459,11 +464,12 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
         $output .= "\n<ul>";
       }
     }
-    else if ($term->depth == $last_depth) {
+    elseif ($term->depth == $last_depth) {
       $output .= '</li>';
     }
-    else if ($term->depth < $last_depth) {
-      for ($i = 0; $i < ($last_depth - $term->depth); $i++) {
+    elseif ($term->depth < $last_depth) {
+      $ctr = $last_depth - $term->depth;
+      for ($i = 0; $i < $ctr; $i++) {
         $output .= "</li>\n</ul>\n</li>";
       }
     }
@@ -471,9 +477,9 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     $output .= "\n<li>";
     $term_item = '';
     if ($forum_link) {
-      $term_item .= l($term->name, 'forum/'. $term->tid, array('attributes' => array('title' => $term->description)));
+      $term_item .= l($term->name, 'forum/' . $term->tid, array('attributes' => array('title' => $term->description)));
     }
-    else if ($term->count) {
+    elseif ($term->count) {
       $term_item .= l($term->name, ($cat_depth < 0) ? taxonomy_term_path($term) : "taxonomy/term/$term->tid/$cat_depth", array('attributes' => array('title' => $term->description)));
     }
     else {
@@ -486,14 +492,14 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     if (variable_get('site_map_show_rss_links', 1) != 0) {
       $rss_link = theme('site_map_feed_icon', "taxonomy/term/$term->tid/$rss_depth/feed");
       if (module_exists('commentrss') && variable_get('commentrss_term', FALSE)) {
-        $rss_link .= ' '. theme('site_map_feed_icon', "crss/term/$term->tid", 'comment');
+        $rss_link .= ' ' . theme('site_map_feed_icon', "crss/term/$term->tid", 'comment');
       }
       if (variable_get('site_map_show_rss_links', 1) == 1) {
-        $term_item .= ' '. $rss_link;
+        $term_item .= ' ' . $rss_link;
       }
       else {
         $class = ' sitemap-rss-left';
-        $term_item = $rss_link .' '. $term_item;
+        $term_item = $rss_link . ' ' . $term_item;
       }
     }
 
@@ -510,14 +516,15 @@ function _site_map_taxonomy_tree($vid, $name = NULL, $description = NULL) {
     }
   }
   $output .= "</div>\n";
-  $output = theme('site_map_box', $title, $output, 'sitemap-terms sitemap-terms-'. $vid . $class);
+  $output = theme('site_map_box', $title, $output, 'sitemap-terms sitemap-terms-' . $vid . $class);
 
   return $output;
 }
 
 /**
  * Get the message which appears above the site map.
- * If the locale module is enabled, an optional language code can be given
+ *
+ * If the locale module is enabled, an optional language code can be given.
  */
 function _sitemap_get_message($lang_code = NULL) {
   if (module_exists('locale')) {
