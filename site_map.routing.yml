@@ -1,0 +1,15 @@
+site_map.settings:
+  path: '/admin/config/search/sitemap'
+  defaults:
+    _form: '\Drupal\site_map\Form\SitemapSettingsForm'
+    _title: 'Site map'
+  requirements:
+    _permission: 'administer site configuration'
+
+site_map.page:
+  path: '/sitemap'
+  defaults:
+    _content: '\Drupal\site_map\Controller\SitemapController::buildPage'
+    _title: 'Site map'
+  requirements:
+    _permission: 'access site map'

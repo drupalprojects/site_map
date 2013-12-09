@@ -20,57 +20,57 @@
 ?>
 
 <div id="site-map">
-  <?php if($message): ?>
+  {% if message %}
     <div class="site-map-message">
-      <?php print $message; ?>
+      {{ message }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($rss_legend): ?>
+  {% if rss_legend %}
     <div class="site-map-rss-legend">
-      <?php print $rss_legend; ?>
+      {{ rss_legend }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($front_page): ?>
+  {% if front_page %}
     <div class="site-map-front-page">
-      <?php print $front_page; ?>
+      {{ front_page }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($blogs): ?>
+  {% if blogs %}
     <div class="site-map-blogs">
-      <?php print $blogs; ?>
+      {{ blogs }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($books): ?>
+  {% if books %}
     <div class="site-map-books">
-      <?php print $books; ?>
+      {{ books }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($menus): ?>
+  {% if menus %}
     <div class="site-map-menus">
-      <?php print $menus; ?>
+      {{ menus }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($faq): ?>
+  {% if faq %}
     <div class="site-map-faq">
-      <?php print $faq; ?>
+      {{ faq }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($taxonomys): ?>
+  {% if taxonomys %}
     <div class="site-map-taxonomys">
-      <?php print $taxonomys; ?>
+      {{ taxonomys }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 
-  <?php if($additional): ?>
+  {% if additional %}
     <div class="site-map-additional">
-      <?php print $additional; ?>
+      {{ additional }}
     </div>
-  <?php endif; ?>
+  {% endif %}
 </div>
