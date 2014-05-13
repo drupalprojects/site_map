@@ -1,8 +1,6 @@
-name: Site map
+name: 'Site map'
 type: module
-description: Display a site map.
+description: 'Display a site map.'
 core: 8.x
 version: VERSION
-dependencies:
-  - menu
 configure: site_map.settings
