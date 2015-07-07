@@ -9,9 +9,10 @@ namespace Drupal\site_map\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Config\Context\ContextInterface;
 use Drupal\Core\Extension\ModuleHandler;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+//use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a configuration form for sitemap.
@@ -30,26 +31,29 @@ class SitemapSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Config\Context\ContextInterface $context
-   *   The configuration context.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   The module handler.
    */
-  public function __construct(ConfigFactory $config_factory, ContextInterface $context, ModuleHandler $module_handler) {
-    parent::__construct($config_factory, $context);
-    $this->moduleHandler = $module_handler;
+  public function __construct(ConfigFactory $config_factory) {
+    parent::__construct($config_factory);
+//    $this->moduleHandler = $module_handler;
+    $this->moduleHandler = \Drupal::moduleHandler();
   }
+//  public function __construct(ConfigFactory $config_factory, ModuleHandler $module_handler) {
+//    parent::__construct($config_factory);
+//    $this->moduleHandler = $module_handler;
+//  }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('config.context.free'),
-      $container->get('module_handler')
-    );
-  }
+//  public static function create(ContainerInterface $container) {
+//    return new static(
+//      $container->get('config.factory'),
+//      $container->get('config.context.free'),
+//      $container->get('module_handler')
+//    );
+//  }
 
   /**
    * {@inheritdoc}
@@ -61,153 +65,164 @@ class SitemapSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
-    $config = $this->configFactory->get('site_map.settings');
+  protected function getEditableConfigNames() {
+    return ['site_map.settings'];
+  }
 
-    $form['site_map_page_title'] = array(
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+//    $config = $this->configFactory->get('site_map.settings');
+    $config = \Drupal::config('site_map.settings');
+
+    $form['page_title'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Page title'),
-      '#default_value' => $config->get('site_map_page_title'),
-      '#description' => $this->t('Page title that will be used on the <a href="@link">site map page</a>.', array('@link' => url('sitemap'))),
+      '#default_value' => $config->get('page_title'),
+      //'#description' => $this->t('Page title that will be used on the <a href="@link">site map page</a>.', array('@link' => url('sitemap'))),
+      '#description' => $this->t('Page title that will be used'),
     );
 
-    $site_map_message = $config->get('site_map_message');
-    $form['site_map_message'] = array(
+    $message = $config->get('message');
+    $form['message'] = array(
       '#type' => 'text_format',
-      '#format' => isset($site_map_message['format']) ? $site_map_message['format'] : NULL,
+      '#format' => isset($message['format']) ? $message['format'] : NULL,
       '#title' => $this->t('Site map message'),
-      '#default_value' => $site_map_message['value'],
+      '#default_value' => $message['value'],
       '#description' => $this->t('Define a message to be displayed above the site map.'),
     );
 
-    $form['site_map_content'] = array(
+    $form['content'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Site map content'),
     );
-    $form['site_map_content']['site_map_show_front'] = array(
+    $form['content']['show_front'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show front page'),
-      '#default_value' => $config->get('site_map_show_front'),
+      '#default_value' => $config->get('show_front'),
       '#description' => $this->t('When enabled, this option will include the front page in the site map.'),
     );
-    $form['site_map_content']['site_map_show_titles'] = array(
+    $form['content']['show_titles'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show titles'),
-      '#default_value' => $config->get('site_map_show_titles'),
+      '#default_value' => $config->get('show_titles'),
       '#description' => $this->t('When enabled, this option will show titles. Disable to not show section titles.'),
     );
 
     if ($this->moduleHandler->moduleExists('book')) {
       $book_options = array();
-      foreach (book_get_books() as $book) {
+      $books = array();
+      //$books = book_get_books();
+      foreach ($books as $book) {
         $book_options[$book['mlid']] = $book['title'];
       }
-      $form['site_map_content']['site_map_show_books'] = array(
+      $form['content']['show_books'] = array(
         '#type' => 'checkboxes',
         '#title' => $this->t('Books to include in the site map'),
-        '#default_value' => $config->get('site_map_show_books'),
+        '#default_value' => $config->get('show_books'),
         '#options' => $book_options,
         '#multiple' => TRUE,
       );
-      $form['site_map_content']['site_map_books_expanded'] = array(
+      $form['content']['books_expanded'] = array(
         '#type' => 'checkbox',
         '#title' => $this->t('Show books expanded'),
-        '#default_value' => $config->get('site_map_books_expanded'),
+        '#default_value' => $config->get('books_expanded'),
         '#description' => $this->t('When enabled, this option will show all children pages for each book.'),
       );
     }
 
     $menu_options = array();
-    $menu_options = menu_get_menus();
-    $form['site_map_content']['site_map_show_menus'] = array(
+    //$menu_options = menu_get_menus();
+    $form['content']['show_menus'] = array(
       '#type' => 'checkboxes',
       '#title' => $this->t('Menus to include in the site map'),
-      '#default_value' => $config->get('site_map_show_menus'),
+      '#default_value' => $config->get('show_menus'),
       '#options' => $menu_options,
       '#multiple' => TRUE,
     );
-    $form['site_map_content']['site_map_show_menus_hidden'] = array(
+    $form['content']['show_menus_hidden'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show disabled menu items'),
-      '#default_value' => $config->get('site_map_show_menus_hidden'),
+      '#default_value' => $config->get('show_menus_hidden'),
       '#description' => $this->t('When enabled, hidden menu links will also be shown.'),
     );
 
     if ($this->moduleHandler->moduleExists('faq')) {
-      $form['site_map_content']['site_map_show_faq'] = array(
+      $form['content']['show_faq'] = array(
         '#type' => 'checkbox',
         '#title' => $this->t('Show FAQ content'),
-        '#default_value' => $config->get('site_map_show_faq'),
+        '#default_value' => $config->get('show_faq'),
         '#description' => $this->t('When enabled, this option will include the content from the FAQ module in the site map.'),
       );
     }
 
     $vocab_options = array();
     if ($this->moduleHandler->moduleExists('taxonomy')) {
-      foreach (taxonomy_vocabulary_load_multiple() as $vocabulary) {
-        $vocab_options[$vocabulary->vid] = $vocabulary->name;
-      }
+//      foreach (taxonomy_vocabulary_load_multiple() as $vocabulary) {
+//        $vocab_options[$vocabulary->vid] = $vocabulary->name;
+//      }
     }
-    $form['site_map_content']['site_map_show_vocabularies'] = array(
+    $form['content']['show_vocabularies'] = array(
       '#type' => 'checkboxes',
       '#title' => $this->t('Categories to include in the site map'),
-      '#default_value' => $config->get('site_map_show_vocabularies'),
+      '#default_value' => $config->get('show_vocabularies'),
       '#options' => $vocab_options,
       '#multiple' => TRUE,
     );
-    $form['site_map_taxonomy_options'] = array(
+    $form['taxonomy_options'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Categories settings'),
     );
-    $form['site_map_taxonomy_options']['site_map_show_description'] = array(
+    $form['taxonomy_options']['show_description'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show category description'),
-      '#default_value' => $config->get('site_map_show_description'),
+      '#default_value' => $config->get('show_description'),
       '#description' => $this->t('When enabled, this option will show the category description.'),
     );
-    $form['site_map_taxonomy_options']['site_map_show_count'] = array(
+    $form['taxonomy_options']['show_count'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show node counts by categories'),
-      '#default_value' => $config->get('site_map_show_count'),
+      '#default_value' => $config->get('show_count'),
       '#description' => $this->t('When enabled, this option will show the number of nodes in each taxonomy term.'),
     );
-    $form['site_map_taxonomy_options']['site_map_categories_depth'] = array(
+    $form['taxonomy_options']['categories_depth'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Categories depth'),
-      '#default_value' => $config->get('site_map_categories_depth'),
+      '#default_value' => $config->get('categories_depth'),
       '#size' => 3,
       '#maxlength' => 10,
       '#description' => $this->t('Specify how many subcategories should be included on the categorie page. Enter "all" to include all subcategories, "0" to include no subcategories, or "-1" not to append the depth at all.'),
     );
-    $form['site_map_taxonomy_options']['site_map_term_threshold'] = array(
+    $form['taxonomy_options']['term_threshold'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Category count threshold'),
-      '#default_value' => $config->get('site_map_term_threshold'),
+      '#default_value' => $config->get('term_threshold'),
       '#size' => 3,
       '#description' => $this->t('Only show categories whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
-    $form['site_map_taxonomy_options']['site_map_forum_threshold'] = array(
+    $form['taxonomy_options']['forum_threshold'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Forum count threshold'),
-      '#default_value' => $config->get('site_map_forum_threshold'),
+      '#default_value' => $config->get('forum_threshold'),
       '#size' => 3,
       '#description' => $this->t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
 
-    $form['site_map_rss_options'] = array(
+    $form['rss_options'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('RSS settings'),
     );
-    $form['site_map_rss_options']['site_map_rss_front'] = array(
+    $form['rss_options']['rss_front'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('RSS feed for front page'),
-      '#default_value' => $config->get('site_map_rss_front'),
+      '#default_value' => $config->get('rss_front'),
       '#description' => $this->t('The RSS feed for the front page, default is rss.xml.'),
     );
-    $form['site_map_rss_options']['site_map_show_rss_links'] = array(
+    $form['rss_options']['show_rss_links'] = array(
       '#type' => 'select',
       '#title' => $this->t('Include RSS links'),
-      '#default_value' => $config->get('site_map_show_rss_links'),
+      '#default_value' => $config->get('show_rss_links'),
       '#options' => array(
         0 => $this->t('None'),
         1 => $this->t('Include on the right side'),
@@ -215,31 +230,31 @@ class SitemapSettingsForm extends ConfigFormBase {
       ),
       '#description' => $this->t('When enabled, this option will show links to the RSS feeds for each category and blog.'),
     );
-    $form['site_map_rss_options']['site_map_rss_depth'] = array(
+    $form['rss_options']['rss_depth'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('RSS feed depth'),
-      '#default_value' => $config->get('site_map_rss_depth'),
+      '#default_value' => $config->get('rss_depth'),
       '#size' => 3,
       '#maxlength' => 10,
       '#description' => $this->t('Specify how many subcategories should be included in the RSS feed. Enter "all" to include all subcategories or "0" to include no subcategories.'),
     );
 
-    $form['site_map_css_options'] = array(
+    $form['css_options'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('CSS settings'),
     );
-    $form['site_map_css_options']['site_map_css'] = array(
+    $form['css_options']['css'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Do not include site map CSS file'),
-      '#default_value' => $config->get('site_map_css'),
+      '#default_value' => $config->get('css'),
       '#description' => $this->t("If you don't want to load the included CSS file you can check this box."),
     );
 
     // Make use of the Checkall module if it's installed.
     if ($this->moduleHandler->moduleExists('checkall')) {
-      $form['site_map_content']['site_map_show_books']['#checkall'] = TRUE;
-      $form['site_map_content']['site_map_show_menus']['#checkall'] = TRUE;
-      $form['site_map_content']['site_map_show_vocabularies']['#checkall'] = TRUE;
+      $form['content']['show_books']['#checkall'] = TRUE;
+      $form['content']['show_menus']['#checkall'] = TRUE;
+      $form['content']['show_vocabularies']['#checkall'] = TRUE;
     }
 
     return parent::buildForm($form, $form_state);
@@ -248,50 +263,101 @@ class SitemapSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, array &$form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
-    $values = $form_state['values'];
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    //$values = $form_state['values'];
+    $config = \Drupal::configFactory()->getEditable('site_map.settings');
 
-    $this->configFactory->get('site_map.settings')
-      ->set('site_map_page_title', $values['site_map_page_title'])
-      ->set('site_map_message.value', $values['site_map_message']['value'])
-      ->set('site_map_message.format', $values['site_map_message']['format'])
-      ->set('site_map_show_front', $values['site_map_show_front'])
-      ->set('site_map_show_titles', $values['site_map_show_titles'])
-      ->set('site_map_show_menus', $values['site_map_show_menus'])
-      ->set('site_map_show_menus_hidden', $values['site_map_show_menus_hidden'])
-      ->set('site_map_show_vocabularies', $values['site_map_show_vocabularies'])
-      ->set('site_map_show_description', $values['site_map_show_description'])
-      ->set('site_map_show_count', $values['site_map_show_count'])
-      ->set('site_map_categories_depth', $values['site_map_categories_depth'])
-      ->set('site_map_term_threshold', $values['site_map_term_threshold'])
-      ->set('site_map_forum_threshold', $values['site_map_forum_threshold'])
-      ->set('site_map_rss_front', $values['site_map_rss_front'])
-      ->set('site_map_show_rss_links', $values['site_map_show_rss_links'])
-      ->set('site_map_rss_depth', $values['site_map_rss_depth'])
-      ->set('site_map_css', $values['site_map_css']);
+    $config->set('page_title', $form_state->getValue('page_title'));
 
-    if ($this->moduleHandler->moduleExists('book')) {
-      $this->configFactory->get('site_map.settings')
-        ->set('site_map_show_books', $values['site_map_show_books'])
-        ->set('site_map_books_expanded', $values['site_map_books_expanded']);
+    // In $message there are both: value and format.
+    $message = $form_state->getValue('message');
+    $config->set('message', $message);
+
+    $config->set('show_front', $form_state->getValue('show_front'));
+    $config->set('show_titles', $form_state->getValue('show_titles'));
+    $config->set('show_blogs', $form_state->getValue('show_blogs'));
+    $config->set('show_books', $form_state->getValue('show_books'));
+    $config->set('books_expanded', $form_state->getValue('books_expanded'));
+    $config->set('show_menus', $form_state->getValue('show_menus'));
+    $config->set('show_menus_hidden', $form_state->getValue('show_menus_hidden'));
+    $config->set('show_faq', $form_state->getValue('show_faq'));
+    $config->set('show_vocabularies', $form_state->getValue('show_vocabularies'));
+    $config->set('show_description', $form_state->getValue('show_description'));
+    $config->set('show_count', $form_state->getValue('show_count'));
+    $config->set('categories_depth', $form_state->getValue('categories_depth'));
+    $config->set('term_threshold', $form_state->getValue('term_threshold'));
+    $config->set('forum_threshold', $form_state->getValue('forum_threshold'));
+    $config->set('rss_front', $form_state->getValue('rss_front'));
+    $config->set('show_rss_links', $form_state->getValue('show_rss_links'));
+    $config->set('rss_depth', $form_state->getValue('rss_depth'));
+    $config->set('css', $form_state->getValue('css'));
+    $config->set('order', $form_state->getValue('order'));
+    $config->set('front', $form_state->getValue('front'));
+
+    $config->save();
+
+//    $config = $this->config('site_map.settings');
+//
+//    foreach (Element::children($form) as $variable) {
+//      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
+//    }
+//    $config->save();
+//
+    if (method_exists($this, '_submitForm')) {
+      $this->_submitForm($form, $form_state);
     }
 
-    if ($this->moduleHandler->moduleExists('faq')) {
-      $this->configFactory->get('site_map.settings')
-        ->set('site_map_show_faq', $values['site_map_show_faq']);
-    }
-
-    $this->configFactory->get('site_map.settings')
-      ->save();
 
     parent::submitForm($form, $form_state);
   }
 
+//  /**
+//   * {@inheritdoc}
+//   */
+//  public function submitForm(array &$form, FormStateInterface $form_state) {
+//    $values = $form_state['values'];
+//
+//    $this->configFactory->getEditable('site_map.settings')
+//      ->set('site_map_page_title', $values['site_map_page_title'])
+//      ->set('site_map_message.value', $values['site_map_message']['value'])
+//      ->set('site_map_message.format', $values['site_map_message']['format'])
+//      ->set('site_map_show_front', $values['site_map_show_front'])
+//      ->set('site_map_show_titles', $values['site_map_show_titles'])
+//      ->set('site_map_show_menus', $values['site_map_show_menus'])
+//      ->set('site_map_show_menus_hidden', $values['site_map_show_menus_hidden'])
+//      ->set('site_map_show_vocabularies', $values['site_map_show_vocabularies'])
+//      ->set('site_map_show_description', $values['site_map_show_description'])
+//      ->set('site_map_show_count', $values['site_map_show_count'])
+//      ->set('site_map_categories_depth', $values['site_map_categories_depth'])
+//      ->set('site_map_term_threshold', $values['site_map_term_threshold'])
+//      ->set('site_map_forum_threshold', $values['site_map_forum_threshold'])
+//      ->set('site_map_rss_front', $values['site_map_rss_front'])
+//      ->set('site_map_show_rss_links', $values['site_map_show_rss_links'])
+//      ->set('site_map_rss_depth', $values['site_map_rss_depth'])
+//      ->set('site_map_css', $values['site_map_css']);
+//
+//    if ($this->moduleHandler->moduleExists('book')) {
+//      $this->configFactory->getEditable('site_map.settings')
+//        ->set('site_map_show_books', $values['site_map_show_books'])
+//        ->set('site_map_books_expanded', $values['site_map_books_expanded']);
+//    }
+//
+//    if ($this->moduleHandler->moduleExists('faq')) {
+//      $this->configFactory->getEditable('site_map.settings')
+//        ->set('site_map_show_faq', $values['site_map_show_faq']);
+//    }
+//
+//    $this->configFactory->getEditable('site_map.settings')
+//      ->save();
+//
+//    parent::submitForm($form, $form_state);
+//  }
+//
 }

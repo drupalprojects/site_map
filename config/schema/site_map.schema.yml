@@ -1,0 +1,84 @@
+# Schema for the configuration files of the Ayah module.
+
+site_map.settings:
+  type: mapping
+  label: 'Site map settings'
+  mapping:
+    page_title:
+      type: string
+      label: 'Page title'
+    message:
+      type: text_format
+      label: 'Site map message'
+    show_front:
+      type: boolean
+      label: 'Show front flag'
+    show_titles:
+      type: boolean
+      label: 'Show titles flag'
+    show_blogs:
+      type: boolean
+      label: 'Show active blog authors flag'
+    show_books:
+      type: sequence
+      label: 'Books to display'
+      sequence:
+        - type: integer
+          label: 'Book id'
+    books_expanded:
+      type: boolean
+      label: 'Books expanded flag'
+    show_menus:
+      type: sequence
+      label: 'Menus to display'
+      sequence:
+        - type: string
+          label: 'Menu id'
+    show_menus_hidden:
+      type: boolean
+      label: 'Show disabled menu items flag'
+    show_faq:
+      type: boolean
+      label: 'Show FAQ flag'
+    show_vocabularies:
+      type: sequence
+      label: 'Vocabularies to display'
+      sequence:
+        - type: string
+          label: 'Vocabulary id'
+    show_description:
+      type: boolean
+      label: 'Show vocabulary description flag'
+    show_count:
+      type: boolean
+      label: 'Show node count by vocabulary flag'
+    categories_depth:
+      type: integer
+      label: 'Categories depth'
+    term_threshold:
+      type: integer
+      label: 'Term threshold'
+    forum_threshold:
+      type: integer
+      label: 'Forum threshold'
+    rss_front:
+      type: string
+      label: 'RSS front'
+    show_rss_links:
+      type: integer
+      label: 'Show RSS links flag'
+    rss_depth:
+      type: integer
+      label: 'RSS depth'
+    css:
+      type: boolean
+      label: 'Exclude css file flag'
+    order:
+      type: sequence
+      label: 'Site map order'
+      sequence:
+        - type: site_map.order.[%key]
+
+site_map.order.*:
+  type: integer
+  label: 'Weight'
