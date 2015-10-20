@@ -8,74 +8,73 @@
 namespace Drupal\site_map\Plugin\Block;
 
 use Drupal\block\Annotation\Block;
-use Drupal\block\BlockBase;
+use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Annotation\Translation;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides a 'Syndicate (site map)' block.
  *
  * @Block(
  *   id = "site_map_syndicate",
+ *   label = @Translation("Syndicate"),
  *   admin_label = @Translation("Syndicate (site map)")
  * )
  */
 class SitemapSyndicateBlock extends BlockBase {
 
   /**
-   * Overrides \Drupal\block\BlockBase::defaultConfiguration().
+   * {@inheritdoc}
    */
   public function defaultConfiguration() {
     return array(
-      'sitemap_block_feed_icon' => TRUE,
-      'sitemap_block_more_link' => TRUE,
-      'cache' => DRUPAL_NO_CACHE,
+      'cache' => array(
+        // No caching.
+        'max_age' => 0,
+      ),
     );
   }
 
   /**
-   * Overrides \Drupal\block\BlockBase::blockForm().
+   * {@inheritdoc}
    */
-  public function blockForm($form, &$form_state) {
-    $form['sitemap_block_feed_icon'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Display feed icon'),
-      '#default_value' => $this->configuration['sitemap_block_feed_icon'],
-    );
-    $form['sitemap_block_more_link'] = array(
-      '#type' => 'checkbox',
-      '#title' => t("Display 'More' link"),
-      '#size' => 60,
-      '#default_value' => $this->configuration['sitemap_block_more_link'],
-    );
-    return $form;
+  protected function blockAccess(AccountInterface $account) {
+    return ($account->hasPermission('access content'));
   }
 
   /**
-   * Overrides \Drupal\block\BlockBase::blockSubmit().
-   */
-  public function blockSubmit($form, &$form_state) {
-    $this->configuration['sitemap_block_feed_icon'] = $form_state['values']['sitemap_block_feed_icon'];
-    $this->configuration['sitemap_block_more_link'] = $form_state['values']['sitemap_block_more_link'];
-  }
-
-  /**
-   * Implements \Drupal\block\BlockBase::blockBuild().
+   * {@inheritdoc}
    */
   public function build() {
-    $output = '';
     $config = \Drupal::config('site_map.settings');
-    if ($this->configuration['sitemap_block_feed_icon']) {
-      $output .= theme('feed_icon', array(
-        'url' => $config->get('site_map_rss_front'),
-        'title' => t('Syndicate'),
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
+    if ($route_name == 'blog.user_rss') {
+      $feedurl = Url::fromRoute('blog.user_rss', array(
+        'user' => \Drupal::routeMatch()->getParameter('user'),
       ));
     }
-    if ($this->configuration['sitemap_block_more_link']) {
-      $output .= theme('more_link', array(
-        'url' => 'sitemap',
-        'title' => t('View the site map to see more RSS feeds.'),
-      ));
+    elseif ($route_name == 'blog.blog_rss') {
+      $feedurl = Url::fromRoute('blog.blog_rss');
     }
+    else {
+      $feedurl = $config->get('site_map_rss_front');
+    }
+
+    $feed_icon = array(
+      '#theme' => 'feed_icon',
+      '#url' => $feedurl,
+      '#title' => t('Syndicate'),
+    );
+    $output = drupal_render($feed_icon);
+    // Re-use drupal core's render element.
+    $more_link = array(
+      '#type' => 'more_link',
+      '#url' => Url::fromRoute('site_map.page'),
+      '#attributes' => array('title' => t('View the site map to see more RSS feeds.')),
+    );
+    $output .= drupal_render($more_link);
 
     return array(
       '#type' => 'markup',

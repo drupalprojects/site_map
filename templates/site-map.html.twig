@@ -1,9 +1,10 @@
-<?php
+{#
 /**
  * @file
  * Theme implementation to display the site map.
  *
  * Available variables:
+ * @TODO Document variables
  * - $message:
  * - $rss_legend:
  * - $front_page:
@@ -11,14 +12,13 @@
  * - $books:
  * - $menus:
  * - $faq:
- * - $taxonomys:
+ * - $vocabularies:
  * - $additional:
  *
  * @see template_preprocess()
  * @see template_preprocess_site_map()
  */
-?>
-
+#}
 <div id="site-map">
   {% if message %}
     <div class="site-map-message">
@@ -63,7 +63,7 @@
   {% endif %}
 
   {% if taxonomys %}
-    <div class="site-map-taxonomys">
+    <div class="site-map-vocabularies">
       {{ taxonomys }}
     </div>
   {% endif %}

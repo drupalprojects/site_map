@@ -1,4 +1,4 @@
-# Schema for the configuration files of the Ayah module.
+# Schema for the configuration files of the site_map module.
 
 site_map.settings:
   type: mapping
