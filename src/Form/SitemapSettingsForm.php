@@ -322,7 +322,7 @@ class SitemapSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->configFactory->get('site_map.settings');
+    $config = $this->configFactory->getEditable('site_map.settings');
 
     $keys = array(
       'site_map_page_title',
@@ -363,6 +363,13 @@ class SitemapSettingsForm extends ConfigFormBase {
     $config->save();
 
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['site_map.settings'];
   }
 
 }
