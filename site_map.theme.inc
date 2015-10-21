@@ -5,7 +5,6 @@
  * Site map theme functions.
  */
 
-use Drupal\Component\Utility\String;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
@@ -195,7 +194,7 @@ function template_preprocess_site_map(&$variables) {
 
   $message = $config->get('site_map_message.value');
   if (!empty($message)) {
-    $variables['message'] = String::checkPlain($message, $config->get('site_map_message.format'));
+    $variables['message'] = $message;
   }
 
   if (($config->get('site_map_show_rss_links') != 0) && \Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_site')) {
