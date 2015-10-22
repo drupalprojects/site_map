@@ -194,7 +194,7 @@ function template_preprocess_site_map(&$variables) {
 
   $message = $config->get('site_map_message.value');
   if (!empty($message)) {
-    $variables['message'] = $message;
+    $variables['message'] = ['#markup' => $message];
   }
 
   if (($config->get('site_map_show_rss_links') != 0) && \Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_site')) {
