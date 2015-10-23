@@ -29,7 +29,7 @@ class SiteMapRssTest extends SiteMapTestBase {
     // Configure module to show categories.
     $vid = $this->vocabulary->id();
     $edit = array(
-      "site_map_show_vocabularies[$vid]" => $vid,
+      "show_vocabularies[$vid]" => $vid,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
   }
@@ -45,7 +45,7 @@ class SiteMapRssTest extends SiteMapTestBase {
     // Change RSS feed for front page.
     $href = Unicode::strtolower($this->randomMachineName());
     $edit = array(
-      'site_map_rss_front' => $href,
+      'rss_front' => $href,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -88,7 +88,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change module not to include RSS links.
     $edit = array(
-      'site_map_show_rss_links' => 0,
+      'show_rss_links' => 0,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -133,7 +133,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change RSS feed depth to -1.
     $edit = array(
-      'site_map_rss_depth' => -1,
+      'rss_depth' => -1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -145,7 +145,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change RSS feed depth to 0.
     $edit = array(
-      'site_map_rss_depth' => 0,
+      'rss_depth' => 0,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -157,7 +157,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change RSS feed depth to 1.
     $edit = array(
-      'site_map_rss_depth' => 1,
+      'rss_depth' => 1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -169,7 +169,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change RSS feed depth to 2.
     $edit = array(
-      'site_map_rss_depth' => 2,
+      'rss_depth' => 2,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -182,7 +182,7 @@ class SiteMapRssTest extends SiteMapTestBase {
 
     // Change RSS feed depth to 3.
     $edit = array(
-      'site_map_rss_depth' => 3,
+      'rss_depth' => 3,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 

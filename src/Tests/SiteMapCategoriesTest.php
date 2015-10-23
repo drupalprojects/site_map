@@ -29,7 +29,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
     // Configure module to show categories.
     $vid = $this->vocabulary->id();
     $edit = array(
-      "site_map_show_vocabularies[$vid]" => $vid,
+      "show_vocabularies[$vid]" => $vid,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
   }
@@ -44,7 +44,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Configure module not to show category description.
     $edit = array(
-      'site_map_show_description' => FALSE,
+      'show_description' => FALSE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -73,7 +73,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Configure module to hide node counts.
     $edit = array(
-      'site_map_show_count' => FALSE,
+      'show_count' => FALSE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -112,7 +112,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change categories depth to -1.
     $edit = array(
-      'site_map_categories_depth' => -1,
+      'categories_depth' => -1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -124,7 +124,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change categories depth to 0.
     $edit = array(
-      'site_map_categories_depth' => 0,
+      'categories_depth' => 0,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -136,7 +136,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change categories depth to 1.
     $edit = array(
-      'site_map_categories_depth' => 1,
+      'categories_depth' => 1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -148,7 +148,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change categories depth to 2.
     $edit = array(
-      'site_map_categories_depth' => 2,
+      'categories_depth' => 2,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -160,7 +160,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change categories depth to 3.
     $edit = array(
-      'site_map_categories_depth' => 3,
+      'categories_depth' => 3,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -202,7 +202,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change category count threshold to -1.
     $edit = array(
-      'site_map_term_threshold' => -1,
+      'term_threshold' => -1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -215,7 +215,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change category count threshold to 0.
     $edit = array(
-      'site_map_term_threshold' => 0,
+      'term_threshold' => 0,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -227,7 +227,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change category count threshold to 1.
     $edit = array(
-      'site_map_term_threshold' => 1,
+      'term_threshold' => 1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -251,7 +251,7 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
 
     // Change category count threshold to 2.
     $edit = array(
-      'site_map_term_threshold' => 2,
+      'term_threshold' => 2,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 

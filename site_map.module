@@ -87,10 +87,10 @@ function _site_map_front_page() {
   $title = t('Front page');
   $output = \Drupal::l(t('Front page of %sn', array('%sn' => \Drupal::config('system.site')->get('name'))), Url::fromRoute('<front>', [], array('html' => TRUE)));
 
-  if ($config->get('site_map_show_rss_links') != 0) {
+  if ($config->get('show_rss_links') != 0) {
     $feed_icon = array(
       '#theme' => 'site_map_feed_icon',
-      '#url' => $config->get('site_map_rss_front'),
+      '#url' => $config->get('rss_front'),
       '#name' => 'front page',
     );
     $rss_link = drupal_render($feed_icon);
@@ -103,7 +103,7 @@ function _site_map_front_page() {
       );
       $rss_link .= ' ' . drupal_render($feed_icon);
     }
-    if ($config->get('site_map_show_rss_links') == 1) {
+    if ($config->get('show_rss_links') == 1) {
       $output .= ' ' . $rss_link;
     }
     else {
@@ -111,7 +111,7 @@ function _site_map_front_page() {
       $output = $rss_link . ' ' . $output;
     }
   }
-  \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+  \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
   $class[] = 'site-map-box-front';
   $attributes = array('class' => $class);
@@ -142,14 +142,14 @@ function _site_map_blogs() {
     $output = '<div class="description">' . t('Community blog and recent blog authors at %sn.', array('%sn' => \Drupal::config('system.site')->get('name'))) . '</div>';
 
     $blog_link = \Drupal::l(t('All blogs'), Url::fromUri('base://' . 'blog'));
-    if ($config->get('site_map_show_rss_links') != 0) {
+    if ($config->get('show_rss_links') != 0) {
       $feed_icon = array(
         '#theme' => 'site_map_feed_icon',
         '#url' => 'blog/feed',
         '#name' => 'all blogs',
       );
       $rss_link = drupal_render($feed_icon);
-      if ($config->get('site_map_show_rss_links') == 1) {
+      if ($config->get('show_rss_links') == 1) {
         $blog_link .= ' ' . $rss_link;
       }
       else {
@@ -157,7 +157,7 @@ function _site_map_blogs() {
         $blog_link = $rss_link . ' ' . $blog_link;
       }
     }
-    \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     $blogs = array();
     $blogs[] = $blog_link;
@@ -183,13 +183,13 @@ function _site_map_blogs() {
         '@name' => $blog->name,
         '@num_items' => $blog->numitems,
       ));
-      if ($config->get('site_map_show_rss_links') != 0) {
+      if ($config->get('show_rss_links') != 0) {
         $feed_icon = array(
           '#theme' => 'site_map_feed_icon',
           '#url' => "blog/$blog->uid/feed",
         );
         $rss_link = drupal_render($feed_icon);
-        if ($config->get('site_map_show_rss_links') == 1) {
+        if ($config->get('show_rss_links') == 1) {
           $blog_item .= ' ' . $rss_link;
         }
         else {
@@ -235,14 +235,14 @@ function _site_map_audio() {
   if (\Drupal::service('module_handler')->moduleExists('audio')) {
     $title = t('Audio');
     $output = \Drupal::l(t('Audio content'), Url::fromUri('base://' . 'audio'));
-    if ($config->get('site_map_show_rss_links') != 0) {
+    if ($config->get('show_rss_links') != 0) {
       $feed_icon = array(
         '#theme' => 'site_map_feed_icon',
         '#url' => 'audio/feed',
         '#name' => 'audio content',
       );
       $rss_link = drupal_render($feed_icon);
-      if ($config->get('site_map_show_rss_links') == 1) {
+      if ($config->get('show_rss_links') == 1) {
         $output .= ' ' . $rss_link;
       }
       else {
@@ -250,7 +250,7 @@ function _site_map_audio() {
         $output = $rss_link . ' ' . $output;
       }
     }
-    \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     $class[] = 'site-map-box-audio';
     $attributes = array('class' => $class);
@@ -282,14 +282,14 @@ function _site_map_video() {
   if (\Drupal::service('module_handler')->moduleExists('video')) {
     $title = t('Video');
     $output = \Drupal::l(t('Video content'), Url::fromUri('base://' . 'video'));
-    if ($config->get('site_map_show_rss_links') != 0) {
+    if ($config->get('show_rss_links') != 0) {
       $feed_icon = array(
         '#theme' => 'site_map_feed_icon',
         '#url' => 'video/feed',
         '#name' => 'video content',
       );
       $rss_link = drupal_render($feed_icon);
-      if ($config->get('site_map_show_rss_links') == 1) {
+      if ($config->get('show_rss_links') == 1) {
         $output .= ' ' . $rss_link;
       }
       else {
@@ -297,7 +297,7 @@ function _site_map_video() {
         $output = $rss_link . '  ' . $output;
       }
     }
-    \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     $class[] = 'site-map-box-video';
     $attributes = array('class' => $class);
@@ -326,10 +326,10 @@ function _site_map_books() {
   $output = '';
   $options = array();
   $book_titles = array();
-  $bids = array_filter($config->get('site_map_show_books'));
+  $bids = array_filter($config->get('show_books'));
 
   if (\Drupal::service('module_handler')->moduleExists('book') && !empty($bids)) {
-    $books_expanded = $config->get('site_map_books_expanded');
+    $books_expanded = $config->get('books_expanded');
     $title = t('Books');
     $description = '<div class="description">' . t('Books at %sn.', array('%sn' => \Drupal::config('system.site')->get('name'))) . '</div>';
 
@@ -349,7 +349,7 @@ function _site_map_books() {
         }
       }
     }
-    \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     if (!$books_expanded && !empty($book_titles)) {
       $book_titles = array(
@@ -413,7 +413,7 @@ function _site_map_menus($mid) {
         $m_array = array('menu', 'menu', $menu['menu_name'], 'title');
         $title = i18n_string_plain($m_array, $title);
       }
-      \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+      \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
       $class[] = 'site-map-box-menu';
       $class[] = 'site-map-box-menu-' . $mid;
@@ -446,7 +446,7 @@ function _site_map_faq() {
     $title = \Drupal::config('faq.settings')->get('faq_title');
     $attributes = array('class' => array('site-map-box-faq'));
     $output = faq_get_faq_list();
-    \Drupal::service('site_map.helper')->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    \Drupal::service('site_map.helper')->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     $site_map_box = array(
       '#theme' => 'site_map_box',

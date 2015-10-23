@@ -54,7 +54,7 @@ class SitemapController implements ContainerInjectionInterface {
     );
 
     $config = \Drupal::config('site_map.settings');
-    if ($config->get('site_map_css') != 1) {
+    if ($config->get('css') != 1) {
       $site_map['#attached']['library'] = array(
         'site_map/site_map.theme',
       );
@@ -71,7 +71,7 @@ class SitemapController implements ContainerInjectionInterface {
    */
   public function getTitle() {
     $config = \Drupal::config('site_map.settings');
-    return $config->get('site_map_page_title');
+    return $config->get('page_title');
   }
 
 }

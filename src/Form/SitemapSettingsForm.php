@@ -86,15 +86,15 @@ class SitemapSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->configFactory->get('site_map.settings');
 
-    $form['site_map_page_title'] = array(
+    $form['page_title'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Page title'),
-      '#default_value' => $config->get('site_map_page_title'),
+      '#default_value' => $config->get('page_title'),
       '#description' => $this->t('Page title that will be used on the <a href="@link">site map page</a>.', array('@link' => Url::fromRoute('site_map.page'))),
     );
 
-    $site_map_message = $config->get('site_map_message');
-    $form['site_map_message'] = array(
+    $site_map_message = $config->get('message');
+    $form['message'] = array(
       '#type' => 'text_format',
       '#format' => isset($site_map_message['format']) ? $site_map_message['format'] : NULL,
       '#title' => $this->t('Site map message'),
@@ -107,25 +107,25 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Site map content'),
     );
     $site_map_ordering = array();
-    $form['site_map_content']['site_map_show_front'] = array(
+    $form['site_map_content']['show_front'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show front page'),
-      '#default_value' => $config->get('site_map_show_front'),
+      '#default_value' => $config->get('show_front'),
       '#description' => $this->t('When enabled, this option will include the front page in the site map.'),
     );
     $site_map_ordering['front'] = t('Front page');
-    $form['site_map_content']['site_map_show_titles'] = array(
+    $form['site_map_content']['show_titles'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show titles'),
-      '#default_value' => $config->get('site_map_show_titles'),
+      '#default_value' => $config->get('show_titles'),
       '#description' => $this->t('When enabled, this option will show titles. Disable to not show section titles.'),
     );
 
     if ($this->moduleHandler->moduleExists('blog')) {
-      $form['site_map_content']['site_map_show_blogs'] = array(
+      $form['site_map_content']['show_blogs'] = array(
         '#type' => 'checkbox',
         '#title' => t('Show active blog authors'),
-        '#default_value' => $config->get('site_map_show_blogs'),
+        '#default_value' => $config->get('show_blogs'),
         '#description' => t('When enabled, this option will show the 10 most active blog authors.'),
       );
       $site_map_ordering['blogs'] = t('Active blog authors');
@@ -136,17 +136,17 @@ class SitemapSettingsForm extends ConfigFormBase {
       foreach ($this->bookManager->getAllBooks() as $book) {
         $book_options[$book['bid']] = $book['title'];
       }
-      $form['site_map_content']['site_map_show_books'] = array(
+      $form['site_map_content']['show_books'] = array(
         '#type' => 'checkboxes',
         '#title' => $this->t('Books to include in the site map'),
-        '#default_value' => $config->get('site_map_show_books'),
+        '#default_value' => $config->get('show_books'),
         '#options' => $book_options,
         '#multiple' => TRUE,
       );
-      $form['site_map_content']['site_map_books_expanded'] = array(
+      $form['site_map_content']['books_expanded'] = array(
         '#type' => 'checkbox',
         '#title' => $this->t('Show books expanded'),
-        '#default_value' => $config->get('site_map_books_expanded'),
+        '#default_value' => $config->get('books_expanded'),
         '#description' => $this->t('When enabled, this option will show all children pages for each book.'),
       );
       $site_map_ordering['books'] = t('Books');
@@ -158,26 +158,26 @@ class SitemapSettingsForm extends ConfigFormBase {
       $menu_options[$id] = $menu->label();
       $site_map_ordering['menus_' . $id] = $menu->label();
     }
-    $form['site_map_content']['site_map_show_menus'] = array(
+    $form['site_map_content']['show_menus'] = array(
       '#type' => 'checkboxes',
       '#title' => $this->t('Menus to include in the site map'),
-      '#default_value' => $config->get('site_map_show_menus'),
+      '#default_value' => $config->get('show_menus'),
       '#options' => $menu_options,
     );
     // Thanks for fix by zhuber at
     // https://drupal.org/node/1331104#comment-5200266.
-    $form['site_map_content']['site_map_show_menus_hidden'] = array(
+    $form['site_map_content']['show_menus_hidden'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show disabled menu items'),
-      '#default_value' => $config->get('site_map_show_menus_hidden'),
+      '#default_value' => $config->get('show_menus_hidden'),
       '#description' => $this->t('When enabled, hidden menu links will also be shown.'),
     );
 
     if ($this->moduleHandler->moduleExists('faq')) {
-      $form['site_map_content']['site_map_show_faq'] = array(
+      $form['site_map_content']['show_faq'] = array(
         '#type' => 'checkbox',
         '#title' => $this->t('Show FAQ content'),
-        '#default_value' => $config->get('site_map_show_faq'),
+        '#default_value' => $config->get('show_faq'),
         '#description' => $this->t('When enabled, this option will include the content from the FAQ module in the site map.'),
       );
       $site_map_ordering['faq'] = t('FAQ content');
@@ -189,23 +189,23 @@ class SitemapSettingsForm extends ConfigFormBase {
         $vocab_options[$vocabulary->id()] = $vocabulary->label();
         $site_map_ordering['vocabularies_' . $vocabulary->id()] = $vocabulary->label();
       }
-      $form['site_map_content']['site_map_show_vocabularies'] = array(
+      $form['site_map_content']['show_vocabularies'] = array(
         '#type' => 'checkboxes',
         '#title' => $this->t('Categories to include in the site map'),
-        '#default_value' => $config->get('site_map_show_vocabularies'),
+        '#default_value' => $config->get('show_vocabularies'),
         '#options' => $vocab_options,
         '#multiple' => TRUE,
       );
     }
 
-    $form['site_map_content']['site_map_order'] = array(
+    $form['site_map_content']['order'] = array(
       '#type' => 'item',
       '#title' => t('Site map order'),
       '#theme' => 'site_map_order',
     );
-    $site_map_order_defaults = $config->get('site_map_order');
+    $site_map_order_defaults = $config->get('order');
     foreach ($site_map_ordering as $content_id => $content_title) {
-      $form['site_map_content']['site_map_order'][$content_id] = array(
+      $form['site_map_content']['order'][$content_id] = array(
         'content' => array(
           '#markup' => $content_title,
         ),
@@ -215,7 +215,7 @@ class SitemapSettingsForm extends ConfigFormBase {
           '#title_display' => 'invisible',
           '#delta' => 50,
           '#default_value' => isset($site_map_order_defaults[$content_id]) ? $site_map_order_defaults[$content_id] : -50,
-          '#parents' => array('site_map_order', $content_id),
+          '#parents' => array('order', $content_id),
         ),
         '#weight' => isset($site_map_order_defaults[$content_id]) ? $site_map_order_defaults[$content_id] : -50,
       );
@@ -225,37 +225,37 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('Categories settings'),
     );
-    $form['site_map_taxonomy_options']['site_map_show_description'] = array(
+    $form['site_map_taxonomy_options']['show_description'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show category description'),
-      '#default_value' => $config->get('site_map_show_description'),
+      '#default_value' => $config->get('show_description'),
       '#description' => $this->t('When enabled, this option will show the category description.'),
     );
-    $form['site_map_taxonomy_options']['site_map_show_count'] = array(
+    $form['site_map_taxonomy_options']['show_count'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Show node counts by categories'),
-      '#default_value' => $config->get('site_map_show_count'),
+      '#default_value' => $config->get('show_count'),
       '#description' => $this->t('When enabled, this option will show the number of nodes in each taxonomy term.'),
     );
-    $form['site_map_taxonomy_options']['site_map_categories_depth'] = array(
+    $form['site_map_taxonomy_options']['categories_depth'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Categories depth'),
-      '#default_value' => $config->get('site_map_categories_depth'),
+      '#default_value' => $config->get('categories_depth'),
       '#size' => 3,
       '#maxlength' => 10,
       '#description' => $this->t('Specify how many categories and subcategories should be included. Enter "-1" to include all categories and subcategories, "0" not to include categories at all, or "1" not to include subcategories.'),
     );
-    $form['site_map_taxonomy_options']['site_map_term_threshold'] = array(
+    $form['site_map_taxonomy_options']['term_threshold'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Category count threshold'),
-      '#default_value' => $config->get('site_map_term_threshold'),
+      '#default_value' => $config->get('term_threshold'),
       '#size' => 3,
       '#description' => $this->t('Only show categories whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
-    $form['site_map_taxonomy_options']['site_map_forum_threshold'] = array(
+    $form['site_map_taxonomy_options']['forum_threshold'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Forum count threshold'),
-      '#default_value' => $config->get('site_map_forum_threshold'),
+      '#default_value' => $config->get('forum_threshold'),
       '#size' => 3,
       '#description' => $this->t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
@@ -264,16 +264,16 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('RSS settings'),
     );
-    $form['site_map_rss_options']['site_map_rss_front'] = array(
+    $form['site_map_rss_options']['rss_front'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('RSS feed for front page'),
-      '#default_value' => $config->get('site_map_rss_front'),
+      '#default_value' => $config->get('rss_front'),
       '#description' => $this->t('The RSS feed for the front page, default is rss.xml.'),
     );
-    $form['site_map_rss_options']['site_map_show_rss_links'] = array(
+    $form['site_map_rss_options']['show_rss_links'] = array(
       '#type' => 'select',
       '#title' => $this->t('Include RSS links'),
-      '#default_value' => $config->get('site_map_show_rss_links'),
+      '#default_value' => $config->get('show_rss_links'),
       '#options' => array(
         0 => $this->t('None'),
         1 => $this->t('Include on the right side'),
@@ -281,10 +281,10 @@ class SitemapSettingsForm extends ConfigFormBase {
       ),
       '#description' => $this->t('When enabled, this option will show links to the RSS feeds for each category and blog.'),
     );
-    $form['site_map_rss_options']['site_map_rss_depth'] = array(
+    $form['site_map_rss_options']['rss_depth'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('RSS feed depth'),
-      '#default_value' => $config->get('site_map_rss_depth'),
+      '#default_value' => $config->get('rss_depth'),
       '#size' => 3,
       '#maxlength' => 10,
       '#description' => $this->t('Specify how many RSS feed links should be included. Enter "-1" to include with all categories and subcategories, "0" not to include with any categories or subcategories, or "1" not to include with subcategories only.'),
@@ -294,18 +294,18 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('CSS settings'),
     );
-    $form['site_map_css_options']['site_map_css'] = array(
+    $form['site_map_css_options']['css'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Do not include site map CSS file'),
-      '#default_value' => $config->get('site_map_css'),
+      '#default_value' => $config->get('css'),
       '#description' => $this->t("If you don't want to load the included CSS file you can check this box."),
     );
 
     // Make use of the Checkall module if it's installed.
     if ($this->moduleHandler->moduleExists('checkall')) {
-      $form['site_map_content']['site_map_show_books']['#checkall'] = TRUE;
-      $form['site_map_content']['site_map_show_menus']['#checkall'] = TRUE;
-      $form['site_map_content']['site_map_show_vocabularies']['#checkall'] = TRUE;
+      $form['site_map_content']['show_books']['#checkall'] = TRUE;
+      $form['site_map_content']['show_menus']['#checkall'] = TRUE;
+      $form['site_map_content']['show_vocabularies']['#checkall'] = TRUE;
     }
 
     return parent::buildForm($form, $form_state);
@@ -325,33 +325,33 @@ class SitemapSettingsForm extends ConfigFormBase {
     $config = $this->configFactory->getEditable('site_map.settings');
 
     $keys = array(
-      'site_map_page_title',
-      array('site_map_message', 'value'),
-      array('site_map_message', 'format'),
-      'site_map_show_front',
-      'site_map_show_titles',
-      'site_map_show_menus',
-      'site_map_show_menus_hidden',
-      'site_map_show_vocabularies',
-      'site_map_show_description',
-      'site_map_show_count',
-      'site_map_categories_depth',
-      'site_map_term_threshold',
-      'site_map_forum_threshold',
-      'site_map_rss_front',
-      'site_map_show_rss_links',
-      'site_map_rss_depth',
-      'site_map_css',
-      'site_map_order',
+      'page_title',
+      array('message', 'value'),
+      array('message', 'format'),
+      'show_front',
+      'show_titles',
+      'show_menus',
+      'show_menus_hidden',
+      'show_vocabularies',
+      'show_description',
+      'show_count',
+      'categories_depth',
+      'term_threshold',
+      'forum_threshold',
+      'rss_front',
+      'show_rss_links',
+      'rss_depth',
+      'css',
+      'order',
     );
 
     if ($this->moduleHandler->moduleExists('book')) {
-      $keys[] = 'site_map_show_books';
-      $keys[] = 'site_map_books_expanded';
+      $keys[] = 'show_books';
+      $keys[] = 'books_expanded';
     }
 
     if ($this->moduleHandler->moduleExists('faq')) {
-      $keys[] = 'site_map_show_faq';
+      $keys[] = 'show_faq';
     }
 
     // Save config.

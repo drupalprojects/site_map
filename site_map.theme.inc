@@ -192,24 +192,24 @@ function theme_site_map_menu_link(array $variables) {
 function template_preprocess_site_map(&$variables) {
   $config = \Drupal::config('site_map.settings');
 
-  $message = $config->get('site_map_message.value');
+  $message = $config->get('message.value');
   if (!empty($message)) {
     $variables['message'] = ['#markup' => $message];
   }
 
-  if (($config->get('site_map_show_rss_links') != 0) && \Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_site')) {
+  if (($config->get('show_rss_links') != 0) && \Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_site')) {
     $rss_legend = array(
       '#theme' => 'site_map_rss_legend',
     );
     $variables['rss_legend'] = drupal_render($rss_legend);
   }
 
-  if ($config->get('site_map_show_titles')) {
+  if ($config->get('show_titles')) {
     $variables['show_titles'] = TRUE;
   }
 
   $variables['site_map'] = '';
-  $site_map_order = $config->get('site_map_order');
+  $site_map_order = $config->get('order');
   asort($site_map_order);
 
   foreach ($site_map_order as $content => $weight) {
@@ -223,40 +223,40 @@ function template_preprocess_site_map(&$variables) {
 
     switch ($type) {
       case 'front':
-        if ($config->get('site_map_show_front')) {
+        if ($config->get('show_front')) {
           $variables['site_map'] .= _site_map_front_page();
         }
         break;
 
       case 'blogs':
-        if ($config->get('site_map_show_blogs')) {
+        if ($config->get('show_blogs')) {
           $variables['site_map'] .= _site_map_blogs();
         }
         break;
 
       case 'books':
-        $books = $config->get('site_map_show_books');
+        $books = $config->get('show_books');
         if (!empty($books)) {
           $variables['site_map'] .= _site_map_books();
         }
         break;
 
       case 'menus':
-        $menus = array_filter($config->get('site_map_show_menus'));
+        $menus = array_filter($config->get('show_menus'));
         if (!empty($menus[$id])) {
           $variables['site_map'] .= _site_map_menus($id);
         }
         break;
 
       case 'faq':
-        if ($config->get('site_map_show_faq')) {
+        if ($config->get('show_faq')) {
           $variables['site_map'] .= _site_map_faq();
         }
         break;
 
       case 'vocabularies':
         $vocabulary = entity_load('taxonomy_vocabulary', $id);
-        $vocabularies = $config->get('site_map_show_vocabularies');
+        $vocabularies = $config->get('show_vocabularies');
 
         if (!empty($vocabularies[$vocabulary->id()])) {
           // Compile the vocabulary trees.

@@ -27,7 +27,7 @@ class SiteMapContentTest extends SiteMapTestBase {
     // Change page title.
     $new_title = $this->randomMachineName();
     $edit = array(
-      'site_map_page_title' => $new_title,
+      'page_title' => $new_title,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -48,7 +48,7 @@ class SiteMapContentTest extends SiteMapTestBase {
     // Change site map message.
     $new_message = $this->randomMachineName(16);
     $edit = array(
-      'site_map_message[value]' => $new_message,
+      'message[value]' => $new_message,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -69,7 +69,7 @@ class SiteMapContentTest extends SiteMapTestBase {
 
     // Configure module to hide front page.
     $edit = array(
-      'site_map_show_front' => FALSE,
+      'show_front' => FALSE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -90,7 +90,7 @@ class SiteMapContentTest extends SiteMapTestBase {
 
     // Configure module to hide titles.
     $edit = array(
-      'site_map_show_titles' => FALSE,
+      'show_titles' => FALSE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -111,8 +111,8 @@ class SiteMapContentTest extends SiteMapTestBase {
 
     // Configure module to show main menu, with enabled menu items only.
     $edit = array(
-      'site_map_show_menus[main]' => 'main',
-      'site_map_show_menus_hidden' => FALSE,
+      'show_menus[main]' => 'main',
+      'show_menus_hidden' => FALSE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -158,7 +158,7 @@ class SiteMapContentTest extends SiteMapTestBase {
 
     // Configure module to show all menu items.
     $edit = array(
-      'site_map_show_menus_hidden' => TRUE,
+      'show_menus_hidden' => TRUE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -189,7 +189,7 @@ class SiteMapContentTest extends SiteMapTestBase {
     // Configure module to show categories.
     $vid = $vocabulary->id();
     $edit = array(
-      "site_map_show_vocabularies[$vid]" => $vid,
+      "show_vocabularies[$vid]" => $vid,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 

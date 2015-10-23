@@ -4,76 +4,76 @@ site_map.settings:
   type: mapping
   label: 'Ayah settings'
   mapping:
-    site_map_page_title:
+    page_title:
       type: string
       label: 'Page title'
-    site_map_message:
+    message:
       type: text_format
       label: 'Site map message'
-    site_map_show_front:
+    show_front:
       type: boolean
       label: 'Show front flag'
-    site_map_show_titles:
+    show_titles:
       type: boolean
       label: 'Show titles flag'
-    site_map_show_blogs:
+    show_blogs:
       type: boolean
       label: 'Show active blog authors flag'
-    site_map_show_books:
+    show_books:
       type: sequence
       label: 'Books to display'
       sequence:
         - type: integer
           label: 'Book id'
-    site_map_books_expanded:
+    books_expanded:
       type: boolean
       label: 'Books expanded flag'
-    site_map_show_menus:
+    show_menus:
       type: sequence
       label: 'Menus to display'
       sequence:
         - type: string
           label: 'Menu id'
-    site_map_show_menus_hidden:
+    show_menus_hidden:
       type: boolean
       label: 'Show disabled menu items flag'
-    site_map_show_faq:
+    show_faq:
       type: boolean
       label: 'Show FAQ flag'
-    site_map_show_vocabularies:
+    show_vocabularies:
       type: sequence
       label: 'Vocabularies to display'
       sequence:
         - type: string
           label: 'Vocabulary id'
-    site_map_show_description:
+    show_description:
       type: boolean
       label: 'Show vocabulary description flag'
-    site_map_show_count:
+    show_count:
       type: boolean
       label: 'Show node count by vocabulary flag'
-    site_map_categories_depth:
+    categories_depth:
       type: integer
       label: 'Categories depth'
-    site_map_term_threshold:
+    term_threshold:
       type: integer
       label: 'Term threshold'
-    site_map_forum_threshold:
+    forum_threshold:
       type: integer
       label: 'Forum threshold'
-    site_map_rss_front:
+    rss_front:
       type: string
       label: 'RSS front'
-    site_map_show_rss_links:
+    show_rss_links:
       type: integer
       label: 'Show RSS links flag'
-    site_map_rss_depth:
+    rss_depth:
       type: integer
       label: 'RSS depth'
-    site_map_css:
+    css:
       type: boolean
       label: 'Exclude css file flag'
-    site_map_order:
+    order:
       type: sequence
       label: 'Site map order'
       sequence:

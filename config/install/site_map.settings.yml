@@ -1,24 +1,24 @@
-site_map_page_title: 'Site map'
-site_map_message:
+page_title: 'Site map'
+message:
   value: ''
   format: 'restricted_html'
-site_map_show_front: true
-site_map_show_titles: true
-site_map_show_blogs: true
-site_map_show_books: []
-site_map_books_expanded: true
-site_map_show_menus: []
-site_map_show_menus_hidden: false
-site_map_show_faq: false
-site_map_show_vocabularies: []
-site_map_show_description: true
-site_map_show_count: true
-site_map_categories_depth: -1
-site_map_term_threshold: 0
-site_map_forum_threshold: -1
-site_map_rss_front: rss.xml
-site_map_show_rss_links: 1
-site_map_rss_depth: -1
-site_map_css: false
-site_map_order:
+show_front: true
+show_titles: true
+show_blogs: true
+show_books: []
+books_expanded: true
+show_menus: []
+show_menus_hidden: false
+show_faq: false
+show_vocabularies: []
+show_description: true
+show_count: true
+categories_depth: -1
+term_threshold: 0
+forum_threshold: -1
+rss_front: rss.xml
+show_rss_links: 1
+rss_depth: -1
+css: false
+order:
   front: -50

@@ -59,7 +59,7 @@ class SitemapSyndicateBlock extends BlockBase {
       $feedurl = Url::fromRoute('blog.blog_rss');
     }
     else {
-      $feedurl = $config->get('site_map_rss_front');
+      $feedurl = $config->get('rss_front');
     }
 
     $feed_icon = array(
