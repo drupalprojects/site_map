@@ -194,7 +194,7 @@ function template_preprocess_site_map(&$variables) {
 
   $message = $config->get('message.value');
   if (!empty($message)) {
-    $variables['message'] = $message;
+    $variables['message'] = ['#markup' => $message];
   }
 
   if (($config->get('show_rss_links') != 0) && \Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_site')) {
@@ -224,33 +224,33 @@ function template_preprocess_site_map(&$variables) {
     switch ($type) {
       case 'front':
         if ($config->get('show_front')) {
-          $variables['front_page'] = _site_map_front_page();
+          $variables['site_map'] .= _site_map_front_page();
         }
         break;
 
       case 'blogs':
         if ($config->get('show_blogs')) {
-          $variables['blogs'] = _site_map_blogs();
+          $variables['site_map'] .= _site_map_blogs();
         }
         break;
 
       case 'books':
         $books = $config->get('show_books');
         if (!empty($books)) {
-          $variables['books'] = _site_map_books();
+          $variables['site_map'] .= _site_map_books();
         }
         break;
 
       case 'menus':
         $menus = array_filter($config->get('show_menus'));
         if (!empty($menus[$id])) {
-          $variables['menus'] = _site_map_menus($id);
+          $variables['site_map'] .= _site_map_menus($id);
         }
         break;
 
       case 'faq':
         if ($config->get('show_faq')) {
-          $variables['faq'] = _site_map_faq();
+          $variables['site_map'] .= _site_map_faq();
         }
         break;
 
@@ -260,7 +260,7 @@ function template_preprocess_site_map(&$variables) {
 
         if (!empty($vocabularies[$vocabulary->id()])) {
           // Compile the vocabulary trees.
-          $variables['vocabularies'] = \Drupal::service('site_map.helper')->getTaxonomys($vocabulary);
+          $variables['site_map'] .= \Drupal::service('site_map.helper')->getTaxonomys($vocabulary);
         }
         break;
     }

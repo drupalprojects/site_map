@@ -3,4 +3,4 @@ site_map.settings:
   parent: system.admin_config_search
   description: 'Control what should be displayed on the site map.'
   route_name: site_map.settings
-  weight: 10
+  weight: -10

@@ -47,7 +47,7 @@ class SiteMapCssTest extends WebTestBase {
 
     // Change module not to include css file.
     $edit = array(
-      'site_map_css' => TRUE,
+      'css' => TRUE,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 

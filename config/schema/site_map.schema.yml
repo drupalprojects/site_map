@@ -1,8 +1,8 @@
-# Schema for the configuration files of the site_map module.
+# Schema for the configuration files of the Ayah module.
 
 site_map.settings:
   type: mapping
-  label: 'Site map settings'
+  label: 'Ayah settings'
   mapping:
     page_title:
       type: string

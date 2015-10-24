@@ -45,7 +45,7 @@ class MenuLinkTree extends CoreMenuLinkTree {
     foreach ($tree as $data) {
       /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
       $link = $data->link;
-      if ($data->access && ($link->isEnabled() || $config->get('site_map_show_menus_hidden'))) {
+      if ($data->access && ($link->isEnabled() || $config->get('show_menus_hidden'))) {
         $items[] = $data;
       }
     }

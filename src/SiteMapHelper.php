@@ -74,7 +74,7 @@ class SiteMapHelper {
       }
 
       $output .= $this->getTaxonomyTree($voc->vid, $voc->name, $voc->description);
-      $this->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+      $this->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
     }
 
     return $output;
@@ -101,12 +101,12 @@ class SiteMapHelper {
 
     if ($vid == \Drupal::config('forum.settings')->get('forum_nav_vocabulary')) {
       $title = \Drupal::l($name, Url::fromRoute('forum.index'));
-      $threshold = $config->get('site_map_forum_threshold');
+      $threshold = $config->get('forum_threshold');
       $forum_link = TRUE;
     }
     else {
       $title = $name ? String::checkPlain($name) : '';
-      $threshold = $config->get('site_map_term_threshold');
+      $threshold = $config->get('term_threshold');
       $forum_link = FALSE;
     }
     if (\Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_term')) {
@@ -121,10 +121,10 @@ class SiteMapHelper {
 
     $last_depth = -1;
 
-    $output .= !empty($description) && $config->get('site_map_show_description') ? '<div class="description">' . Xss::filterAdmin($description) . "</div>\n" : '';
+    $output .= !empty($description) && $config->get('show_description') ? '<div class="description">' . Xss::filterAdmin($description) . "</div>\n" : '';
 
     // taxonomy_get_tree() honors access controls.
-    $depth = $config->get('site_map_categories_depth');
+    $depth = $config->get('categories_depth');
     if ($depth <= -1) {
       $depth = NULL;
     }
@@ -166,13 +166,13 @@ class SiteMapHelper {
       else {
         $term_item .= String::checkPlain($term->name);
       }
-      if ($config->get('site_map_show_count')) {
+      if ($config->get('show_count')) {
         $term_item .= " <span title=\"" . format_plural($term->count, '1 item has this tag', '@count items have this tag') . "\">(" . $term->count . ")</span>";
       }
 
       // RSS depth.
-      $rss_depth = $config->get('site_map_rss_depth');
-      if ($config->get('site_map_show_rss_links') != 0 && ($rss_depth == -1 || $term->depth < $rss_depth)) {
+      $rss_depth = $config->get('rss_depth');
+      if ($config->get('show_rss_links') != 0 && ($rss_depth == -1 || $term->depth < $rss_depth)) {
         $feed_icon = array(
           '#theme' => 'site_map_feed_icon',
           '#url' => 'taxonomy/term/' . $term->tid . '/feed',
@@ -188,7 +188,7 @@ class SiteMapHelper {
           );
           $rss_link .= drupal_render($feed_icon);
         }
-        if ($config->get('site_map_show_rss_links') == 1) {
+        if ($config->get('show_rss_links') == 1) {
           $term_item .= ' ' . $rss_link;
         }
         else {
@@ -212,7 +212,7 @@ class SiteMapHelper {
         $output .= "</li>\n</ul>\n";
       }
     }
-    $this->setOption($options, 'site_map_show_titles', 1, 'show_titles', TRUE);
+    $this->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
 
     $class[] = 'site-map-box-terms';
     $class[] = 'site-map-box-terms-' . $vid;
