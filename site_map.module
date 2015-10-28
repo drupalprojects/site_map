@@ -345,7 +345,7 @@ function _site_map_books() {
           $output .= drupal_render($tree_output);
         }
         else {
-          $book_titles[] = \Drupal::l($book['title'], \Drupal::url('node.view', array('node' => $book['bid'])));
+          $book_titles[] = \Drupal::l($book['title'], Url::fromRoute('entity.node.canonical', array('node' => $book['bid'])));
         }
       }
     }
