@@ -21,15 +21,8 @@ function site_map_theme() {
       'variables' => array(
         'message' => NULL,
         'rss_legend' => NULL,
-        'front_page' => NULL,
-        'blogs' => NULL,
-        'books' => NULL,
-        'menus' => NULL,
-        'faq' => NULL,
-        'taxonomys' => NULL,
-        'additional' => NULL,
+        'site_map_items' => array(),
       ),
-      'template' => 'site-map',
       'file' => 'site_map.theme.inc',
     ),
     'site_map_box' => array(
@@ -39,8 +32,6 @@ function site_map_theme() {
         'attributes' => array(),
         'options' => NULL,
       ),
-      'function' => 'theme_site_map_box',
-      'file' => 'site_map.theme.inc',
     ),
     'site_map_feed_icon' => array(
       'variables' => array(
@@ -48,8 +39,6 @@ function site_map_theme() {
         'name' => NULL,
         'type' => 'node',
       ),
-      'function' => 'theme_site_map_feed_icon',
-      'file' => 'site_map.theme.inc',
     ),
     'site_map_menu_link' => array(
       'render element' => 'element',
@@ -119,7 +108,7 @@ function _site_map_front_page() {
   $site_map_box = array(
     '#theme' => 'site_map_box',
     '#title' => $title,
-    '#content' => $output,
+    '#content' => array('#markup' => $output),
     '#attributes' => $attributes,
     '#options' => $options,
   );
@@ -319,7 +308,7 @@ function _site_map_video() {
  * Render the latest maps for books.
  *
  * @return string
- *   Returns HTML string of site map for video.
+ *   Returns HTML string of site map for books.
  */
 function _site_map_books() {
   $config = \Drupal::config('site_map.settings');
@@ -365,7 +354,7 @@ function _site_map_books() {
       $site_map_box = array(
         '#theme' => 'site_map_box',
         '#title' => $title,
-        '#content' => $description . $output,
+        '#content' => array('#markup' => $description . $output),
         '#attributes' => $attributes,
         '#options' => $options,
       );

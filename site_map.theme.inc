@@ -31,48 +31,7 @@ function theme_site_map_rss_legend() {
 }
 
 /**
- * Preprocesses the variables for theme_site_map_box().
- */
-function template_preprocess_site_map_box(&$variables) {
-  $variables['attributes']['class'][] = 'site-map-box';
-}
-
-/**
- * Returns HTML for a themed site map box.
- *
- * @param array $variables
- *   An associative array containing:
- *   - title: The subject of the box.
- *   - content: The content of the box.
- *   - attributes:  Optional attributes for the box.
- *   - options:  Options are set by site_map.helper service.
- *
- * @return string
- *   Returns sitemap display in DIV.
- */
-function theme_site_map_box(array $variables) {
-  $title = $variables['title'];
-  $content = $variables['content'];
-  $attributes = $variables['attributes'];
-  $options = $variables['options'];
-
-  $output = '';
-  if (!empty($title) || !empty($content)) {
-    $output .= '<div' . new Attribute($attributes) . '>';
-    if (!empty($title) && isset($options['show_titles'])) {
-      $output .= '<h2 class="title">' . $title . '</h2>';
-    }
-    if (!empty($content)) {
-      $output .= '<div class="content">' . $content . '</div>';
-    }
-    $output .= '</div>';
-  }
-
-  return $output;
-}
-
-/**
- * Returns HTML for a feed icon with link.
+ * Preprocesses variables for site-map-feed-icon.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
@@ -80,10 +39,10 @@ function theme_site_map_box(array $variables) {
  *   - name: The name of the feed.
  *   - type: The type of feed icon.
  *
- * @return string
- *   Constructs and returns html with feed image icon.
+ * @return array $variables
+ *
  */
-function theme_site_map_feed_icon(array $variables) {
+function template_preprocess_site_map_feed_icon(array &$variables) {
   $output = '';
 
   switch ($variables['type']) {
@@ -118,7 +77,7 @@ function theme_site_map_feed_icon(array $variables) {
     )));
   }
 
-  return $output;
+  $variables['icon'] = $output;
 }
 
 /**
@@ -185,11 +144,11 @@ function theme_site_map_menu_link(array $variables) {
 
 
 /**
- * Preprocesses the variables for site-map.tpl.php.
+ * Preprocesses the variables for site-map.html.twig.
  *
- * @see site-map.tpl.php
+ * @see site-map.html.twig
  */
-function template_preprocess_site_map(&$variables) {
+function template_preprocess_site_map(array &$variables) {
   $config = \Drupal::config('site_map.settings');
 
   $message = $config->get('message.value');
@@ -208,7 +167,7 @@ function template_preprocess_site_map(&$variables) {
     $variables['show_titles'] = TRUE;
   }
 
-  $variables['site_map'] = '';
+  $variables['site_map_items'] = [];
   $site_map_order = $config->get('order');
   asort($site_map_order);
 
@@ -224,33 +183,21 @@ function template_preprocess_site_map(&$variables) {
     switch ($type) {
       case 'front':
         if ($config->get('show_front')) {
-          $variables['site_map'] .= _site_map_front_page();
-        }
-        break;
-
-      case 'blogs':
-        if ($config->get('show_blogs')) {
-          $variables['site_map'] .= _site_map_blogs();
+          $variables['site_map_items']['front'] = _site_map_front_page();
         }
         break;
 
       case 'books':
         $books = $config->get('show_books');
         if (!empty($books)) {
-          $variables['site_map'] .= _site_map_books();
+          $variables['site_map_items']['books'] = _site_map_books();
         }
         break;
 
       case 'menus':
         $menus = array_filter($config->get('show_menus'));
         if (!empty($menus[$id])) {
-          $variables['site_map'] .= _site_map_menus($id);
-        }
-        break;
-
-      case 'faq':
-        if ($config->get('show_faq')) {
-          $variables['site_map'] .= _site_map_faq();
+          $variables['site_map_items']['menus'][] = array('#markup' => _site_map_menus($id));
         }
         break;
 
@@ -260,7 +207,7 @@ function template_preprocess_site_map(&$variables) {
 
         if (!empty($vocabularies[$vocabulary->id()])) {
           // Compile the vocabulary trees.
-          $variables['site_map'] .= \Drupal::service('site_map.helper')->getTaxonomys($vocabulary);
+          $variables['site_map_items']['vocabularies'] = \Drupal::service('site_map.helper')->getTaxonomys($vocabulary);
         }
         break;
     }
@@ -269,7 +216,7 @@ function template_preprocess_site_map(&$variables) {
   // Invoke all custom modules and integrate themed HTML into the site map.
   $additional = \Drupal::service('module_handler')->invokeAll('site_map');
   foreach ($additional as $themed_site_map_code) {
-    $variables['additional'] .= $themed_site_map_code;
+    $variables['additional'] = $themed_site_map_code;
   }
 }
 
