@@ -22,6 +22,7 @@ function site_map_theme() {
         'message' => NULL,
         'rss_legend' => NULL,
         'site_map_items' => array(),
+        'additional' => NULL,
       ),
       'file' => 'site_map.theme.inc',
     ),
@@ -112,7 +113,7 @@ function _site_map_front_page() {
     '#attributes' => $attributes,
     '#options' => $options,
   );
-  return drupal_render($site_map_box);
+  return $site_map_box;
 }
 
 /**
@@ -358,7 +359,7 @@ function _site_map_books() {
         '#attributes' => $attributes,
         '#options' => $options,
       );
-      $output = drupal_render($site_map_box);
+      $output = $site_map_box;
     }
   }
 

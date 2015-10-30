@@ -1,18 +1,23 @@
-<?php
+{#
 /**
  * @file
  * Theme implementation to display the site map.
  *
  * Available variables:
- * - $message:
- * - $rss_legend:
- * - $site_map:
- * - $additional:
+ * - message:
+ * - rss_legend:
+ * - site_map_items: A keyed array of site_map boxes. Various keys are as
+ *   follows:
+ *   - front
+ *   - books
+ *   - menus
+ *   - vocabularies
+ * - additional:
  *
  * @see template_preprocess()
  * @see template_preprocess_site_map()
  */
-?>
+#}
 
 <div id="site-map">
   {% if message %}
@@ -27,7 +32,11 @@
     </div>
   {% endif %}
 
-  {{ site_map | raw }}
+  {% if site_map_items %}
+    {% for item in site_map_items %}
+      {{ item }}
+    {% endfor %}
+  {% endif %}
 
   {% if additional %}
     <div class="site-map-additional">
