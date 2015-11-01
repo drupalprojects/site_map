@@ -1,7 +1,7 @@
 # Schema for the configuration files of the Site Map module.
 
 site_map.settings:
-  type: mapping
+  type: config_object
   label: 'Site map settings'
   mapping:
     page_title:
