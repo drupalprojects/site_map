@@ -252,13 +252,15 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#size' => 3,
       '#description' => $this->t('Only show taxonomy terms whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
-    $form['site_map_taxonomy_options']['forum_threshold'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Forum count threshold'),
-      '#default_value' => $config->get('forum_threshold'),
-      '#size' => 3,
-      '#description' => $this->t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable.'),
-    );
+    if ($this->moduleHandler->moduleExists('forum')) {
+      $form['site_map_taxonomy_options']['forum_threshold'] = array(
+        '#type' => 'textfield',
+        '#title' => $this->t('Forum count threshold'),
+        '#default_value' => $config->get('forum_threshold'),
+        '#size' => 3,
+        '#description' => $this->t('Only show forums whose node counts are greater than this threshold. Set to -1 to disable.'),
+      );
+    }
 
     $form['site_map_rss_options'] = array(
       '#type' => 'details',
@@ -340,7 +342,7 @@ class SitemapSettingsForm extends ConfigFormBase {
       'forum_threshold',
       'rss_front',
       'show_rss_links',
-      'rss_depth',
+      'rss_taxonomy',
       'css',
       'order',
     );
