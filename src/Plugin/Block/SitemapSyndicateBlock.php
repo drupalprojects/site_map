@@ -7,7 +7,7 @@
 
 namespace Drupal\site_map\Plugin\Block;
 
-use Drupal\block\Annotation\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Session\AccountInterface;
@@ -40,7 +40,7 @@ class SitemapSyndicateBlock extends BlockBase {
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-    return ($account->hasPermission('access content'));
+    return AccessResult::allowedIfHasPermission($account, 'access content');
   }
 
   /**
