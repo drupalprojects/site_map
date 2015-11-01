@@ -110,9 +110,9 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
     );
     $this->drupalPostForm('node/add/article', $edit, t('Save and publish'));
 
-    // Change categories depth to -1.
+    // Change vocabulary depth to -1.
     $edit = array(
-      'categories_depth' => -1,
+      'vocabulary_depth' => -1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -122,9 +122,9 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
       $this->assertLink($tag);
     }
 
-    // Change categories depth to 0.
+    // Change vocabulary depth to 0.
     $edit = array(
-      'categories_depth' => 0,
+      'vocabulary_depth' => 0,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -134,9 +134,9 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
       $this->assertNoLink($tag);
     }
 
-    // Change categories depth to 1.
+    // Change vocabulary depth to 1.
     $edit = array(
-      'categories_depth' => 1,
+      'vocabulary_depth' => 1,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -146,9 +146,9 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
     $this->assertNoLink($tags[1]);
     $this->assertNoLink($tags[2]);
 
-    // Change categories depth to 2.
+    // Change vocabulary depth to 2.
     $edit = array(
-      'categories_depth' => 2,
+      'vocabulary_depth' => 2,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
@@ -158,9 +158,9 @@ class SiteMapCategoriesTest extends SiteMapTestBase {
     $this->assertLink($tags[1]);
     $this->assertNoLink($tags[2]);
 
-    // Change categories depth to 3.
+    // Change vocabulary depth to 3.
     $edit = array(
-      'categories_depth' => 3,
+      'vocabulary_depth' => 3,
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 

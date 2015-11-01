@@ -191,7 +191,7 @@ class SitemapSettingsForm extends ConfigFormBase {
       }
       $form['site_map_content']['show_vocabularies'] = array(
         '#type' => 'checkboxes',
-        '#title' => $this->t('Categories to include in the site map'),
+        '#title' => $this->t('Vocabularies to include in the site map'),
         '#default_value' => $config->get('show_vocabularies'),
         '#options' => $vocab_options,
         '#multiple' => TRUE,
@@ -223,34 +223,34 @@ class SitemapSettingsForm extends ConfigFormBase {
 
     $form['site_map_taxonomy_options'] = array(
       '#type' => 'details',
-      '#title' => $this->t('Categories settings'),
+      '#title' => $this->t('Taxonomy settings'),
     );
     $form['site_map_taxonomy_options']['show_description'] = array(
       '#type' => 'checkbox',
-      '#title' => $this->t('Show category description'),
+      '#title' => $this->t('Show vocabulary description'),
       '#default_value' => $config->get('show_description'),
-      '#description' => $this->t('When enabled, this option will show the category description.'),
+      '#description' => $this->t('When enabled, this option will show the vocabulary description.'),
     );
     $form['site_map_taxonomy_options']['show_count'] = array(
       '#type' => 'checkbox',
-      '#title' => $this->t('Show node counts by categories'),
+      '#title' => $this->t('Show node counts by taxonomy terms'),
       '#default_value' => $config->get('show_count'),
       '#description' => $this->t('When enabled, this option will show the number of nodes in each taxonomy term.'),
     );
-    $form['site_map_taxonomy_options']['categories_depth'] = array(
+    $form['site_map_taxonomy_options']['vocabulary_depth'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Categories depth'),
-      '#default_value' => $config->get('categories_depth'),
+      '#title' => $this->t('Vocabulary depth'),
+      '#default_value' => $config->get('vocabulary_depth'),
       '#size' => 3,
       '#maxlength' => 10,
-      '#description' => $this->t('Specify how many categories and subcategories should be included. Enter "-1" to include all categories and subcategories, "0" not to include categories at all, or "1" not to include subcategories.'),
+      '#description' => $this->t('Specify how many levels taxonomy terms should be included. Enter "-1" to include all terms, "0" not to include terms at all, or "1" to only include top-level terms.'),
     );
     $form['site_map_taxonomy_options']['term_threshold'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Category count threshold'),
+      '#title' => $this->t('Term count threshold'),
       '#default_value' => $config->get('term_threshold'),
       '#size' => 3,
-      '#description' => $this->t('Only show categories whose node counts are greater than this threshold. Set to -1 to disable.'),
+      '#description' => $this->t('Only show taxonomy terms whose node counts are greater than this threshold. Set to -1 to disable.'),
     );
     $form['site_map_taxonomy_options']['forum_threshold'] = array(
       '#type' => 'textfield',
@@ -279,15 +279,15 @@ class SitemapSettingsForm extends ConfigFormBase {
         1 => $this->t('Include on the right side'),
         2 => $this->t('Include on the left side'),
       ),
-      '#description' => $this->t('When enabled, this option will show links to the RSS feeds for each category and blog.'),
+      '#description' => $this->t('When enabled, this option will show links to the RSS feeds for the front page and taxonomy terms, if enabled.'),
     );
-    $form['site_map_rss_options']['rss_depth'] = array(
+    $form['site_map_rss_options']['rss_taxonomy'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('RSS feed depth'),
-      '#default_value' => $config->get('rss_depth'),
+      '#title' => $this->t('RSS depth for vocabularies'),
+      '#default_value' => $config->get('rss_taxonomy'),
       '#size' => 3,
       '#maxlength' => 10,
-      '#description' => $this->t('Specify how many RSS feed links should be included. Enter "-1" to include with all categories and subcategories, "0" not to include with any categories or subcategories, or "1" not to include with subcategories only.'),
+      '#description' => $this->t('Specify how many RSS feed links should be displayed with taxonomy terms. Enter "-1" to include with all terms, "0" not to include with any terms, or "1" to show only for top-level taxonomy terms.'),
     );
 
     $form['site_map_css_options'] = array(
@@ -335,7 +335,7 @@ class SitemapSettingsForm extends ConfigFormBase {
       'show_vocabularies',
       'show_description',
       'show_count',
-      'categories_depth',
+      'vocabulary_depth',
       'term_threshold',
       'forum_threshold',
       'rss_front',

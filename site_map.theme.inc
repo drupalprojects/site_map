@@ -202,12 +202,12 @@ function template_preprocess_site_map(array &$variables) {
         break;
 
       case 'vocabularies':
-        $vocabulary = entity_load('taxonomy_vocabulary', $id);
+        $vocabulary = \Drupal::entityManager()->getStorage('taxonomy_vocabulary')->load($id);
         $vocabularies = $config->get('show_vocabularies');
 
         if (!empty($vocabularies[$vocabulary->id()])) {
           // Compile the vocabulary trees.
-          $variables['site_map_items']['vocabularies'] = \Drupal::service('site_map.helper')->getTaxonomys($vocabulary);
+          $variables['site_map_items']['vocabularies'][] = \Drupal::service('site_map.helper')->getTerms($vocabulary);
         }
         break;
     }

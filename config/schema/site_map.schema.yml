@@ -1,8 +1,8 @@
-# Schema for the configuration files of the Ayah module.
+# Schema for the configuration files of the Site Map module.
 
 site_map.settings:
   type: mapping
-  label: 'Ayah settings'
+  label: 'Site map settings'
   mapping:
     page_title:
       type: string
@@ -51,23 +51,23 @@ site_map.settings:
       label: 'Show vocabulary description flag'
     show_count:
       type: boolean
-      label: 'Show node count by vocabulary flag'
-    categories_depth:
+      label: 'Show node count by taxonomy term flag'
+    vocabulary_depth:
       type: integer
-      label: 'Categories depth'
+      label: 'Vocabulary depth'
     term_threshold:
       type: integer
-      label: 'Term threshold'
+      label: 'Term count threshold'
     forum_threshold:
       type: integer
-      label: 'Forum threshold'
+      label: 'Forum count threshold'
     rss_front:
       type: string
       label: 'RSS front'
     show_rss_links:
       type: integer
-      label: 'Show RSS links flag'
-    rss_depth:
+      label: 'Position of RSS links'
+    rss_taxonomy:
       type: integer
       label: 'RSS depth'
     css:

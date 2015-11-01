@@ -61,19 +61,20 @@ class SiteMapHelper {
    * @param object $voc
    *   Vocabulary entity.
    *
-   * @return string
-   *   Returns HTML string of site map for taxonomies.
+   * @return array
+   *   Returns a renderable array for site map taxonomies.
    */
-  public function getTaxonomys($voc) {
+  public function getTerms($voc) {
     $output = '';
     $options = array();
 
     if (\Drupal::moduleHandler()->moduleExists('taxonomy') && !empty($voc)) {
+      //@TODO: Test translations in core
       if (\Drupal::moduleHandler()->moduleExists('i18n_taxonomy')) {
         $voc->name = i18n_taxonomy_vocabulary_name($voc, $GLOBALS['language']->language);
       }
 
-      $output .= $this->getTaxonomyTree($voc->vid, $voc->name, $voc->description);
+      $output = $this->getTaxonomyTree($voc->get('vid'), $voc->get('name'), $voc->get('description'));
       $this->setOption($options, 'show_titles', 1, 'show_titles', TRUE);
     }
 
@@ -99,21 +100,24 @@ class SiteMapHelper {
     $class = array();
     $config = \Drupal::config('site_map.settings');
 
-    if ($vid == \Drupal::config('forum.settings')->get('forum_nav_vocabulary')) {
+    if (\Drupal::service('module_handler')->moduleExists('forum') && $vid == \Drupal::config('forum.settings')->get('forum_nav_vocabulary')) {
+      //@TODO: Forum support
       $title = \Drupal::l($name, Url::fromRoute('forum.index'));
       $threshold = $config->get('forum_threshold');
       $forum_link = TRUE;
     }
     else {
-      $title = $name ? String::checkPlain($name) : '';
+      $title = $name;
       $threshold = $config->get('term_threshold');
       $forum_link = FALSE;
     }
+
+    //@TODO: Remove unused code
     if (\Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_term')) {
       $feed_icon = array(
         '#theme' => 'site_map_feed_icon',
         '#url' => "crss/vocab/$vid",
-        '#name' => String::checkPlain($name),
+        '#name' => $name,
         '#type' => 'comment',
       );
       $title .= ' ' . drupal_render($feed_icon);
@@ -123,12 +127,11 @@ class SiteMapHelper {
 
     $output .= !empty($description) && $config->get('show_description') ? '<div class="description">' . Xss::filterAdmin($description) . "</div>\n" : '';
 
-    // taxonomy_get_tree() honors access controls.
-    $depth = $config->get('categories_depth');
+    $depth = $config->get('vocabulary_depth');
     if ($depth <= -1) {
       $depth = NULL;
     }
-    $tree = taxonomy_get_tree($vid, 0, $depth);
+    $tree = \Drupal::entityManager()->getStorage('taxonomy_term')->loadTree($vid, 0, $depth);
     foreach ($tree as $term) {
       $term->count = site_map_taxonomy_term_count_nodes($term->tid);
       if ($term->count <= $threshold) {
@@ -164,14 +167,17 @@ class SiteMapHelper {
         $term_item .= \Drupal::l($term->name, Url::fromRoute('entity.taxonomy_term.canonical', array('taxonomy_term' => $term->tid), array('attributes' => array('title' => $term->description__value))));
       }
       else {
-        $term_item .= String::checkPlain($term->name);
+        $term_item .= $term->name;
       }
       if ($config->get('show_count')) {
-        $term_item .= " <span title=\"" . format_plural($term->count, '1 item has this tag', '@count items have this tag') . "\">(" . $term->count . ")</span>";
+        //@TODO figure out updated implementation of format_plural
+        // $span_title = format_plural($term->count, '1 item has this term', '@count items have this term')
+        $span_title = '';
+        $term_item .= " <span title=\"" . $span_title . "\">(" . $term->count . ")</span>";
       }
 
       // RSS depth.
-      $rss_depth = $config->get('rss_depth');
+      $rss_depth = $config->get('rss_taxonomy');
       if ($config->get('show_rss_links') != 0 && ($rss_depth == -1 || $term->depth < $rss_depth)) {
         $feed_icon = array(
           '#theme' => 'site_map_feed_icon',
@@ -179,6 +185,8 @@ class SiteMapHelper {
           '#name' => $term->name,
         );
         $rss_link = drupal_render($feed_icon);
+
+        // @TODO: Cleanup unused code
         if (\Drupal::service('module_handler')->moduleExists('commentrss') && \Drupal::config('commentrss.settings')->get('commentrss_term')) {
           $feed_icon = array(
             '#theme' => 'site_map_feed_icon',
@@ -221,12 +229,12 @@ class SiteMapHelper {
     $site_map_box = array(
       '#theme' => 'site_map_box',
       '#title' => $title,
-      '#content' => $output,
+      '#content' => array('#markup' => $output),
       '#attributes' => $attributes,
       '#options' => $options,
     );
 
-    return drupal_render($site_map_box);
+    return $site_map_box;
   }
 
 }
