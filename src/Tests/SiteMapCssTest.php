@@ -51,6 +51,9 @@ class SiteMapCssTest extends WebTestBase {
     );
     $this->drupalPostForm('admin/config/search/sitemap', $edit, t('Save configuration'));
 
+    // Clearing the cache is needed for the test.
+    $this->drupalPostForm('admin/config/development/performance', array(), 'Clear all caches');
+
     // Assert that css file is not included.
     $this->drupalGet('/sitemap');
     $this->assertNoRaw('site_map.theme.css');
