@@ -90,7 +90,7 @@ class SitemapSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Page title'),
       '#default_value' => $config->get('page_title'),
-      '#description' => $this->t('Page title that will be used on the <a href="@link">site map page</a>.', array('@link' => Url::fromRoute('site_map.page'))),
+      '#description' => $this->t('Page title that will be used on the @link.', array('@link' => $this->l($this->t('site map page'), Url::fromRoute('site_map.page')))),
     );
 
     $site_map_message = $config->get('message');
