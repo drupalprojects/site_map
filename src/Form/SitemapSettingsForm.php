@@ -105,6 +105,7 @@ class SitemapSettingsForm extends ConfigFormBase {
     $form['site_map_content'] = array(
       '#type' => 'details',
       '#title' => $this->t('Site map content'),
+      '#open' => TRUE,
     );
     $site_map_ordering = array();
     $form['site_map_content']['show_front'] = array(
