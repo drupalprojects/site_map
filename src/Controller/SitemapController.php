@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\Controller\SitemapController.
- */
-
 namespace Drupal\site_map\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;

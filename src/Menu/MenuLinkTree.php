@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Core\Menu\MenuLinkTree.
- */
-
 namespace Drupal\site_map\Menu;
 
 use Drupal\Core\Menu\MenuLinkTree as CoreMenuLinkTree;

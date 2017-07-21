@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\Plugin\Block\SitemapSyndicateBlock.
- */
-
 namespace Drupal\site_map\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;

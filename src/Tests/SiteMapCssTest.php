@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\Tests\SiteMapCssTest.
- */
-
 namespace Drupal\site_map\Tests;
 
 use Drupal\simpletest\WebTestBase;

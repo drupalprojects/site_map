@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\SitemapServiceProvider.
- */
-
 namespace Drupal\site_map;
 
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;

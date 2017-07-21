@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\Form\SitemapSettingsForm.
- */
-
 namespace Drupal\site_map\Form;
 
 use Drupal\Core\Form\ConfigFormBase;

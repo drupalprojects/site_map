@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\site_map\Tests\SiteMapTestBase.
- */
-
 namespace Drupal\site_map\Tests;
 
 use Drupal\Component\Utility\Unicode;

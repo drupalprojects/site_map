@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\SitemapHelper.
- */
-
 namespace Drupal\site_map;
 
 use Drupal\Core\Config\ConfigFactoryInterface;

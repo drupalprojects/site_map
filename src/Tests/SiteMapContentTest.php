@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\site_map\Tests\SiteMapContentTest.
- */
-
 namespace Drupal\site_map\Tests;
 
 use Drupal\site_map\Tests\SiteMapTestBase;
