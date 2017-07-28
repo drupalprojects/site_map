@@ -3,7 +3,6 @@
 namespace Drupal\site_map;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Component\Utility\String;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
 

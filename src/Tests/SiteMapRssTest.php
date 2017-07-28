@@ -2,7 +2,6 @@
 
 namespace Drupal\site_map\Tests;
 
-use Drupal\site_map\Tests\SiteMapTestBase;
 use Drupal\Component\Utility\Unicode;
 
 /**

@@ -2,8 +2,6 @@
 
 namespace Drupal\site_map\Tests;
 
-use Drupal\site_map\Tests\SiteMapTestBase;
-
 /**
  * Test case class for site map's content tests.
  *

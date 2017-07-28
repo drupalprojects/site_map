@@ -4,7 +4,6 @@ namespace Drupal\site_map\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
